@@ -14,6 +14,9 @@ broadcast/
 # docs media (local only)
 docs/media/
 
+# agent runtime state
+agent/state/
+
 # vercel
 .vercel/
 

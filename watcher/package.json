@@ -1,0 +1,15 @@
+{
+  "name": "servo-watcher",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node watcher.mjs",
+    "submit": "node submit.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "viem": "^2.21.0",
+    "xrpl": "^4.2.0"
+  }
+}
