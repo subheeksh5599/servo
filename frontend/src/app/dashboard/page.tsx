@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Sidebar, { type View } from "@/components/dashboard/Sidebar";
 import HeaderBar, { NewOrderModal } from "@/components/dashboard/HeaderBar";
 import GroupedList from "@/components/dashboard/GroupedList";
+import CommandSearch, { type CommandAction } from "@/components/dashboard/CommandSearch";
+import ProfileDropdown from "@/components/dashboard/ProfileDropdown";
 import { VenuesView, ReceiptsView, AgentView, SettingsView } from "@/components/dashboard/Views";
 import type { ServoData, Order } from "@/components/dashboard/types";
 
@@ -20,8 +22,15 @@ export default function Dashboard() {
   const [data, setData] = useState<ServoData | null>(null);
   const [price, setPrice] = useState<number | null>(null);
   const [live, setLive] = useState(false);
-  const [search, setSearch] = useState("");
   const [newOrderOpen, setNewOrderOpen] = useState(false);
+
+  const handleCommand = (cmd: CommandAction) => {
+    if (cmd.newOrder) {
+      setNewOrderOpen(true);
+      return;
+    }
+    if (cmd.view) setView(cmd.view);
+  };
 
   useEffect(() => {
     let m = true;
@@ -82,8 +91,8 @@ export default function Dashboard() {
         orderCount={data?.deployed ? orders.length : null}
         live={live}
         price={price}
-        search={search}
-        onSearch={setSearch}
+        searchBar={<CommandSearch onCommand={handleCommand} />}
+        profileCard={<ProfileDropdown onNavigate={(v) => setView(v)} onConnect={() => setNewOrderOpen(true)} />}
       />
       <main className="ml-[240px] bg-pane">
         <HeaderBar
@@ -93,7 +102,7 @@ export default function Dashboard() {
           countLabel={countLabel}
           onNewOrder={() => setNewOrderOpen(true)}
         />
-        {view === "orders" && <GroupedList data={{ ...data, orders } as unknown as ServoData} tab={tab} search={search} />}
+        {view === "orders" && <GroupedList data={{ ...data, orders } as unknown as ServoData} tab={tab} />}
         {view === "receipts" && <ReceiptsView data={data ?? ({} as ServoData)} />}
         {view === "venues" && <VenuesView data={data ?? ({} as ServoData)} />}
         {view === "agent" && <AgentView data={data ?? ({} as ServoData)} />}

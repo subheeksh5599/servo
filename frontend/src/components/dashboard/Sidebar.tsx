@@ -1,7 +1,8 @@
 "use client";
 
-import { Search, ChevronDown, MoreHorizontal, Zap, Settings, ListChecks, ReceiptText, Layers, Bot } from "lucide-react";
+import { ChevronDown, Zap, Settings, ListChecks, ReceiptText, Layers, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 export type View = "orders" | "receipts" | "venues" | "agent" | "settings";
 
@@ -18,16 +19,16 @@ export default function Sidebar({
   orderCount,
   live,
   price,
-  search,
-  onSearch,
+  searchBar,
+  profileCard,
 }: {
   view: View;
   onView: (v: View) => void;
   orderCount: number | null;
   live: boolean;
   price: number | null;
-  search: string;
-  onSearch: (s: string) => void;
+  searchBar: ReactNode;
+  profileCard: ReactNode;
 }) {
   return (
     <aside className="fixed left-0 top-0 bottom-0 z-40 flex w-[240px] flex-col border-r border-white/7 bg-rail">
@@ -37,21 +38,8 @@ export default function Sidebar({
         <ChevronDown size={14} className="text-mist" />
       </div>
 
-      {/* search (filters the order list) */}
-      <div className="mx-4 mt-3 flex items-center gap-2 rounded-md border border-white/7 px-2.5 py-1.5">
-        <Search size={13} className="text-mist" />
-        <input
-          value={search}
-          onChange={(e) => onSearch(e.target.value)}
-          placeholder="Search orders"
-          className="w-full flex-1 bg-transparent font-body text-[13px] text-ink outline-none placeholder:text-mist"
-        />
-        {search && (
-          <button onClick={() => onSearch("")} className="font-body text-[11px] text-mist hover:text-ink">
-            clear
-          </button>
-        )}
-      </div>
+      {/* command search */}
+      <div className="px-4 pt-3">{searchBar}</div>
 
       {/* primary nav */}
       <nav className="mt-3 space-y-0.5 px-2.5">
@@ -97,17 +85,8 @@ export default function Sidebar({
         </button>
       </nav>
 
-      {/* user card */}
-      <div className="mt-auto flex items-center gap-2.5 border-t border-white/7 p-4">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full border border-dashed border-mist/50 font-body text-[10px] text-mist">
-          —
-        </span>
-        <div className="flex-1">
-          <p className="font-body text-[13px] font-medium text-ink">Not connected</p>
-          <p className="font-body text-[11px] text-mist">connect wallet · sign once</p>
-        </div>
-        <MoreHorizontal size={15} className="text-mist" />
-      </div>
+      {/* profile card */}
+      <div className="mt-auto p-3">{profileCard}</div>
     </aside>
   );
 }
