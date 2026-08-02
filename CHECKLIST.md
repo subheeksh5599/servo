@@ -22,13 +22,13 @@ How to use this file: tick boxes as you finish things. Every item is needed for 
 ## PHASE 0 — Project setup
 
 - [x] Create GitHub repo named `servo`, push initial commit
-- [ ] Write `.gitignore` (node_modules, .env, cache, out/, broadcast/, docs/media)
-- [ ] Create `.env.example` with all env var names and comments (never commit real .env)
-- [ ] Add README.md skeleton (fill fully in Phase 9)
-- [ ] Add LICENSE (MIT or Apache-2.0)
+- [x] Write `.gitignore` (node_modules, .env, cache, out/, broadcast/, docs/media)
+- [x] Create `.env.example` with all env var names and comments (never commit real .env)
+- [x] Add README.md skeleton (fill fully in Phase 9)
+- [x] Add LICENSE (MIT or Apache-2.0)
 - [x] Decide project name for submission: Servo
-- [ ] Set up Foundry (forge init in contracts/)
-- [ ] Set up frontend scaffold (Next.js + TypeScript + viem)
+- [x] Set up Foundry (forge init in contracts/)
+- [x] Set up frontend scaffold — N/A (frontend removed; backend focus)
 - [ ] Set up agent service scaffold (Node/TypeScript or Python)
 - [ ] Set up watcher/keeper scaffold
 - [ ] Install tooling: foundryup, node 22+, pnpm/npm, hardhat not needed (Foundry only)
@@ -46,32 +46,32 @@ How to use this file: tick boxes as you finish things. Every item is needed for 
 
 ## PHASE 1 — Research & prerequisites (Day 1)
 
-- [ ] Read Flare Smart Accounts (FSA) docs: https://fsa.flare.network + dev docs
-- [ ] Read FSA smart account proxy contracts on the explorer — understand:
-  - [ ] How the proxy is mapped 1:1 to an XRPL address
-  - [ ] How memo-encoded instructions are parsed and executed
-  - [ ] How FDC proves the XRPL transaction on-chain
-  - [ ] Gas abstraction mechanism
-  - [ ] How a third party (our keeper/agent) can submit instructions for a user's FSA
-- [ ] Read FAssets v1.3 direct-mint docs:
-  - [ ] Destination-tag / memo routing mechanism
-  - [ ] Executor role + restrictions
-  - [ ] Mint caps (hourly/daily) and large-mint delays
-  - [ ] Minimum mint amounts and fees
-- [ ] Read FDC docs + verifier API:
-  - [ ] ReferencePayment attestation type (used for XRPL payments)
-  - [ ] Public verifier API endpoint + key (all-zeros public key)
-  - [ ] Attestation round timing (~90s)
-- [ ] Read FTSO v2 docs:
-  - [ ] ContractRegistry address
-  - [ ] FtsoV2 feed IDs: FLR/USD `0x01464c522f555344...`, XRP/USD `0x015852502f555344...`
+- [x] Read Flare Smart Accounts (FSA) docs: https://fsa.flare.network + dev docs
+- [x] Read FSA smart account proxy contracts on the explorer — understand:
+  - [x] How the proxy is mapped 1:1 to an XRPL address
+  - [x] How memo-encoded instructions are parsed and executed (0xFF memo opcode carries full PackedUserOperation)
+  - [x] How FDC proves the XRPL transaction on-chain (Payment + ReferencePayment attestations)
+  - [x] Gas abstraction mechanism (FSA pays gas; executor fees)
+  - [x] How a third party (our keeper/agent) can submit instructions for a user's FSA
+- [x] Read FAssets v1.3 direct-mint docs:
+  - [x] Destination-tag / memo routing mechanism (Core Vault + executeDirectMinting)
+  - [x] Executor role + restrictions (direct minting executor)
+  - [ ] Mint caps (hourly/daily) and large-mint delays — verify against deployed contract
+  - [ ] Minimum mint amounts and fees — verify against deployed contract
+- [x] Read FDC docs + verifier API:
+  - [x] ReferencePayment attestation type (used for XRPL payments)
+  - [x] Public verifier API endpoint + key (all-zeros public key)
+  - [x] Attestation round timing (~90s)
+- [x] Read FTSO v2 docs:
+  - [x] ContractRegistry address
+  - [x] FtsoV2 feed IDs: FLR/USD `0x01464c522f555344...`, XRP/USD `0x015852502f555344...`
 - [ ] List target yield venues + their contracts:
   - [ ] Firelight (stXRP LST) — exchange rate contract
   - [ ] Kinetic (lending) — supply index contract
   - [ ] Clearstar / Upshift vault — share price contract
   - [ ] (Stretch) Spectra, Enosys, SparkDex, MXRPY, Monarq
-- [ ] Pin all contract addresses (Coston2 + mainnet) in a single `addresses.md` in docs/
-- [ ] Write a one-page architecture note in docs/ARCHITECTURE.md (update as you build)
+- [x] Pin all contract addresses (Coston2 + mainnet) in a single `addresses.md` in docs/
+- [x] Write a one-page architecture note in docs/ARCHITECTURE.md (update as you build)
 - [ ] Join Flare hackathon Telegram group (https://t.me/+5Vn6ZKhr6KI3NjIx) + ask questions if stuck
 
 ---
