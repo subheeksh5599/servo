@@ -1,8 +1,9 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/Nav";
-import Hero from "@/components/Hero";
-import Marquee from "@/components/Marquee";
+import KineticHero from "@/components/KineticHero";
+import MachineMarquee from "@/components/MachineMarquee";
 import Blueprint from "@/components/Blueprint";
+import Manifesto from "@/components/Manifesto";
 import WhyFlare from "@/components/WhyFlare";
 import Roadmap from "@/components/Roadmap";
 import Footer from "@/components/Footer";
@@ -12,9 +13,10 @@ export default function Page() {
     <SmoothScroll>
       <Nav />
       <main>
-        <Hero />
-        <Marquee />
+        <KineticHero />
+        <MachineMarquee />
         <Blueprint />
+        <Manifesto />
         <WhyFlare />
         <Roadmap />
       </main>

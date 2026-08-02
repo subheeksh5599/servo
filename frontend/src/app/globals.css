@@ -6,13 +6,8 @@
   color-scheme: dark;
 }
 
-html {
-  scroll-behavior: auto;
-}
-
 body {
   @apply bg-ink text-paper font-mono antialiased;
-  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
@@ -20,9 +15,10 @@ body {
   color: #edede8;
 }
 
-/* Fig label */
+/* ---------- type helpers ---------- */
+
 .fig-label {
-  @apply font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-paper/40;
+  @apply font-mono text-[0.6875rem] uppercase tracking-[0.22em] text-paper/40;
 }
 
 .fig-label::before {
@@ -30,35 +26,91 @@ body {
   @apply inline-block w-8 h-px align-middle mr-3 bg-accent;
 }
 
-/* Reveal base (JS adds .is-visible) */
-.reveal {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+.dim-label {
+  @apply font-mono text-[0.625rem] uppercase tracking-[0.2em] text-paper/30;
 }
 
-.reveal.is-visible {
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 237, 232, 0.3);
+}
+
+.text-outline-faint {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(237, 237, 232, 0.12);
+}
+
+/* ---------- kinetic words ---------- */
+
+.w-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.w-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(115%);
+  transition:
+    opacity 0.7s ease,
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.w-word.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  html.lenis,
-  html.lenis body {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
+.hero-word {
+  display: inline-block;
+  will-change: transform;
 }
 
-/* Marquee */
+/* ---------- blueprint drawing ---------- */
+
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(237, 237, 232, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(237, 237, 232, 0.035) 1px, transparent 1px);
+  background-size: 96px 96px;
+}
+
+.crosshair {
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.crosshair::before,
+.crosshair::after {
+  content: "";
+  position: absolute;
+  background: rgba(237, 237, 232, 0.35);
+}
+
+.crosshair::before {
+  left: 50%;
+  top: 0;
+  width: 1px;
+  height: 100%;
+}
+
+.crosshair::after {
+  top: 50%;
+  left: 0;
+  height: 1px;
+  width: 100%;
+}
+
+.bp-row {
+  opacity: 0.12;
+  transform: translateY(28px);
+}
+
+/* ---------- marquee ---------- */
+
 .marquee {
   overflow: hidden;
   white-space: nowrap;
@@ -68,7 +120,7 @@ body {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
-  animation: marqueeScroll 32s linear infinite;
+  animation: marqueeScroll 36s linear infinite;
   will-change: transform;
 }
 
@@ -78,5 +130,59 @@ body {
   }
   100% {
     transform: translateX(-50%);
+  }
+}
+
+/* ---------- misc ---------- */
+
+.blink {
+  animation: blink 2s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.nav-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-word,
+  .hero-word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee__inner {
+    animation: none;
+  }
+  .bp-row {
+    opacity: 1;
+    transform: none;
   }
 }

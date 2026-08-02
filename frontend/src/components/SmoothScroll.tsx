@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -8,8 +8,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function SmoothScroll({ children }: { children: ReactNode }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -18,30 +16,32 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     });
 
     lenis.on("scroll", ScrollTrigger.update);
-
-    const raf = (time: number) => {
-      lenis.raf(time * 1000);
-    };
+    const raf = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
-    // Scroll reveals
+    // Kinetic word reveals: when a word enters, reveal with stagger
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
+            const parent = entry.target.closest("[data-words]");
+            const words = parent
+              ? parent.querySelectorAll(".w-word")
+              : [entry.target];
+            words.forEach((w) => w.classList.add("is-visible"));
+            if (parent) observer.unobserve(parent);
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.3 }
     );
 
-    document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
+    document.querySelectorAll("[data-words]").forEach((el) =>
+      observer.observe(el)
+    );
 
-    // Refresh triggers after fonts/layout settle
-    const t = window.setTimeout(() => ScrollTrigger.refresh(), 600);
+    const t = window.setTimeout(() => ScrollTrigger.refresh(), 700);
 
     return () => {
       window.clearTimeout(t);
@@ -52,9 +52,5 @@ export default function SmoothScroll({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  return (
-    <div ref={rootRef} className="bg-ink text-paper">
-      {children}
-    </div>
-  );
+  return <div className="bg-ink text-paper">{children}</div>;
 }
