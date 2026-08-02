@@ -5,19 +5,25 @@
 > **Hackathon:** Flare Summer Signal 2026 · **Bounty:** 1 — Interoperable Asset Products
 > **Deadline:** Aug 14, 2026 · **Docs:** https://dev.flare.network/
 
-## BUILD STATUS (actual, 2026-08-02)
+## BUILD STATUS (actual, 2026-08-02, updated)
 
-- [x] Phase 0 — repo, Foundry, env, LICENSE, README, addresses docs
-- [x] Phase 1 — FSA/FAssets/FDC/FTSO research; all addresses verified on-chain (docs/addresses.md)
-- [x] Phase 2 — contracts: StandingOrderRegistry + ExecutionController + ERC4626VenueAdapter, **24/24 tests green**; deployed to a Coston2 fork with real protocol addresses (registry 0xE97166C46816d48B2aFFCfFf704B962E88fd0abE, controller 0xC5123B98c3A0aa1a4F9390BCf76f7B9D775a5687)
-- [x] Phase 3 — watcher: XRPL payment stream → FDC attestation → registerOrder (code complete; live submit blocked by verifier WAF from build env — documented)
+- [x] Phase 0 — repo, Foundry, env, LICENSE, README, addresses docs; agent/watcher scaffolds (Node ESM, deps pinned); tooling installed
+- [x] Phase 1 — FSA/FAssets/FDC/FTSO research; all addresses verified on-chain (docs/addresses.md); minting state verified LIVE on Coston2 (mintingPaused=false, granularity 1 UBA, 6 decimals); yield venues = real FSA vaults (Firelight/Kinetic docs JS-walled → on-chain vault probing instead)
+- [x] Phase 2 — contracts: StandingOrderRegistry + ExecutionController + ERC4626VenueAdapter, **24/24 tests green after forge fmt**; deployed to a Coston2 fork with real protocol addresses
+- [x] Phase 3 — watcher: XRPL stream → FDC XRPPayment attestation → registerOrder; replay-protected state (state/seen-txs.json), /health endpoint, SIGINT/SIGTERM graceful shutdown; attestation type fixed to XRPPayment (was ReferencePayment — would have failed live)
 - [x] Phase 4 — indexer: 7/30d realized APY from real adapter exchange rates; proven against fork (TESTearnXRP rate 1.001100009020019019)
 - [x] Phase 5 — agent: venue scoring, confidence (freshness+count), auto-execute ≥70%, one-signature ask below; ticked against fork
-- [x] Phase 6 — frontend REMOVED by user decision (backend focus); landing page shipped separately at servo-cyan.vercel.app (superseded)
-- [~] Phase 7 — E2E: real XRPL testnet payment broadcast (tx E715FA55…, tesSUCCESS, Servo memo); contracts exercised on Coston2 fork; live attestation→mint leg ready but verifier WAF-blocked from this machine
-- [x] Phase 8 — edge cases in tests (caps, breaker, stale price, inactive, unverified proof); `git grep` secret sweep clean; no mock data anywhere
-- [~] Phase 9 — submission package: README complete; DEMO_SCRIPT.md local-only; remaining: DoraHacks form + video (user)
-- [ ] Phase 10 — stretch: FBTC/FDOGE standing orders, auto-redeem, FCC strategy (roadmap only)
+- [x] Phase 6 — frontend rebuilt (post-removal): brutalist-lite landing + shadcn/ui dashboard with light/dark mode, live FTSO price, honest empty states; deployed at servo-cyan.vercel.app
+- [~] Phase 7 — E2E: real XRPL testnet payment broadcast (tx E715FA55…, tesSUCCESS, Servo memo); contracts exercised on Coston2 fork; BLOCKED ITEMS (user-side, one click each): Coston2 faucet reCAPTCHA (https://faucet.flare.network/coston2) + FDC verifier WAF from this machine — live attestation→mint leg runs the moment those unlock
+- [x] Phase 8 — edge cases in tests (caps, breaker, stale price, inactive, unverified proof); forge fmt clean; fresh-clone test green (forge build+test, all scripts syntax-check, frontend build); git grep secret sweep clean; no mock data anywhere
+- [~] Phase 9 — submission package: README + TRUST_MODEL.md + SUBMISSION_DRAFT.md (local-only, 10 elements with [placeholders]); remaining (user): DoraHacks form + demo video + Coston2 addresses after deploy
+- [ ] Phase 10 — stretch (FBTC/FDOGE, auto-redeem, FCC TEE, more venues): deferred per checklist's own condition ("only if ahead of schedule") — core E2E still needs the faucet/verifier unlock first
+
+## REMAINING — HUMAN ACTIONS (blocked from this environment, not scope cuts)
+1. Coston2 faucet, one click (reCAPTCHA): https://faucet.flare.network/coston2 → address 0x4ccafDF7c8aFa0C7a8FE8ABACB1Cf726f82A5509 (relayer, key in .env) — 100 C2FLR + 10 FXRP per 24h
+2. Deploy: forge script script/Deploy.s.sol --rpc-url https://coston2-api.flare.network/ext/C/rpc --private-key <relayer> --broadcast → paste addresses into Vercel envs SERVO_REGISTRY + SERVO_CONTROLLER → dashboard goes live
+3. Run watcher (watcher/) + agent (agent/) on an always-on host (VPS 187.127.137.136 or cron); if verifier WAF persists, run from that host — different egress
+4. Record demo video (wf-recorder, docs/DEMO_SCRIPT.md) + submit on DoraHacks before Aug 14
 
 ## PROJECT RULES (non-negotiable)
 

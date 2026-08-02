@@ -1,8 +1,12 @@
 // Servo watcher: watches an XRPL address for payments carrying a Servo memo,
-// requests an FDC ReferencePayment attestation for each, and registers the
+// requests an FDC XRPPayment attestation for each, and registers the
 // standing order on-chain (StandingOrderRegistry.registerOrder).
 
 import "dotenv/config";
+import http from "node:http";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { Client, dropsToXrp } from "xrpl";
 import { createWalletClient, createPublicClient, http, parseAbi } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
@@ -10,6 +14,22 @@ import { defineChain } from "viem";
 import { FdcClient } from "./fdc-client.mjs";
 
 const env = process.env;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// --- replay protection: seen transactions survive restarts ---------------
+const STATE_DIR = path.join(__dirname, "state");
+const STATE_FILE = path.join(STATE_DIR, "seen-txs.json");
+const state = { seen: {}, lastPaymentAt: 0, registered: {} };
+try {
+  Object.assign(state, JSON.parse(fs.readFileSync(STATE_FILE, "utf8")));
+} catch {
+  fs.mkdirSync(STATE_DIR, { recursive: true });
+}
+function flushState() {
+  fs.mkdirSync(STATE_DIR, { recursive: true });
+  fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
+}
+const startedAt = Date.now();
 
 // --- config ---
 const COSTON2 = defineChain({
@@ -59,12 +79,19 @@ async function attestAndRegister(tx) {
   const txHash = tx.hash || tx.transaction_hash;
   console.log(`[watcher] payment ${txHash} from ${tx.Account} amount=${dropsToXrp(tx.Amount)} XRP tag=${tx.DestinationTag ?? "-"}`);
   if (!txHash) throw new Error("no tx hash");
+  if (state.seen[txHash]) {
+    console.log(`[watcher] ${txHash} already processed — skipping replay`);
+    return state.registered[txHash] ?? "skipped";
+  }
+  state.seen[txHash] = Date.now();
+  state.lastPaymentAt = Date.now();
+  flushState();
 
-  const prepared = await fdc.prepareReferencePayment(txHash);
+  const prepared = await fdc.prepareXrpPayment(txHash);
   console.log(`[watcher] attestation requested: requestId=${prepared.requestId} status=${prepared.status}`);
   if (prepared.status !== "OK") throw new Error(`prepare failed: ${prepared.status}`);
 
-  const attestationType = FdcClient.ATTESTATION.referencePayment;
+  const attestationType = FdcClient.ATTESTATION.xrpPayment;
   const final = await fdc.waitForFinalized(attestationType, prepared.requestId);
   console.log(`[watcher] attestation finalized (round ${final.attestationProof?.data?.votingRound ?? "?"})`);
 
@@ -79,6 +106,8 @@ async function attestAndRegister(tx) {
   });
   const receipt = await publicClient.waitForTransactionReceipt({ hash: orderId });
   console.log(`[watcher] order registered: tx=${orderId} status=${receipt.status}`);
+  state.registered[txHash] = orderId;
+  flushState();
   return orderId;
 }
 
@@ -113,6 +142,52 @@ async function main() {
     accounts: [WATCH_ADDRESS],
   });
   console.log("[watcher] subscribed; waiting for Servo payments...");
+
+  // --- /health endpoint ---------------------------------------------------
+  const health = http.createServer(async (req, res) => {
+    if (req.url !== "/health") {
+      res.writeHead(404);
+      res.end();
+      return;
+    }
+    let orderCount = null;
+    try {
+      orderCount = Number(
+        await publicClient.readContract({ address: REGISTRY, abi: REGISTRY_ABI, functionName: "orderCount" })
+      );
+    } catch {
+      /* registry read failed */
+    }
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(
+      JSON.stringify({
+        ok: true,
+        uptimeSec: Math.round((Date.now() - startedAt) / 1000),
+        connected: client.isConnected(),
+        registry: REGISTRY,
+        orderCount,
+        seenPayments: Object.keys(state.seen).length,
+        lastPaymentAt: state.lastPaymentAt ? new Date(state.lastPaymentAt).toISOString() : null,
+      })
+    );
+  });
+  health.listen(Number(env.WATCHER_PORT || 9100));
+  console.log(`[watcher] health endpoint on :${env.WATCHER_PORT || 9100}/health`);
+
+  // --- graceful shutdown --------------------------------------------------
+  const shutdown = async () => {
+    console.log("[watcher] shutting down...");
+    health.close();
+    try {
+      await client.disconnect();
+    } catch {
+      /* already closed */
+    }
+    flushState();
+    process.exit(0);
+  };
+  process.on("SIGINT", shutdown);
+  process.on("SIGTERM", shutdown);
 }
 
 main().catch((e) => {

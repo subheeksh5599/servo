@@ -54,8 +54,7 @@ contract ExecutionController {
     address public immutable ftsoV2;
     /// @notice FXRP token (funding asset of every order).
     IERC20 public immutable fxrp;
-    bytes21 public constant XRP_USD_FEED =
-        bytes21(hex"015852502f55534400000000000000000000000000");
+    bytes21 public constant XRP_USD_FEED = bytes21(hex"015852502f55534400000000000000000000000000");
     uint256 public constant PRICE_DECIMALS = 1e6;
     uint256 public immutable maxPerTickDrops;
     uint256 public immutable priceMaxAgeSeconds;
@@ -70,7 +69,12 @@ contract ExecutionController {
         _;
     }
 
-    constructor(address _registry, address _fxrp, uint256 _maxPerTickDrops, uint256 _priceMaxAgeSeconds) {
+    constructor(
+        address _registry,
+        address _fxrp,
+        uint256 _maxPerTickDrops,
+        uint256 _priceMaxAgeSeconds
+    ) {
         registry = StandingOrderRegistry(_registry);
         ftsoV2 = registry.ftsoV2();
         fxrp = IERC20(_fxrp);
@@ -112,8 +116,7 @@ contract ExecutionController {
         registry.markExecuted(_orderId, amount);
 
         emit ExecutionReceipt(
-            _orderId, o.ownerXrpl, amount, price, o.venueId,
-            va.adapter, bytes32(0), block.timestamp
+            _orderId, o.ownerXrpl, amount, price, o.venueId, va.adapter, bytes32(0), block.timestamp
         );
     }
 
@@ -124,7 +127,9 @@ contract ExecutionController {
     /// @param _orderId The order being funded by this payment.
     /// @param _payment The attested XRPL payment (IXRPPayment.Proof).
     function executeMintLeg(uint256 _orderId, IXRPPayment.Proof calldata _payment)
-        external onlyOperator returns (bool)
+        external
+        onlyOperator
+        returns (bool)
     {
         // The registry re-verifies the proof against the FDC.
         bool verified = registry.verifyPaymentProof(_payment);

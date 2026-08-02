@@ -10,6 +10,7 @@ export class FdcClient {
   }
 
   static ATTESTATION = {
+    xrpPayment: "XRPPayment",
     referencePayment: "ReferencePayment",
     payment: "Payment",
   };
@@ -30,12 +31,14 @@ export class FdcClient {
     return res.json();
   }
 
-  /** Request an attestation for an XRPL transaction. Returns {requestId, status}. */
-  async prepareReferencePayment(txHashHex) {
+  /** Request an XRPPayment attestation for an XRPL transaction. Returns {requestId, status}. */
+  async prepareXrpPayment(txHashHex) {
+    // rippled hashes come bare (no 0x); the verifier expects 0x-prefixed bytes32
+    const transactionId = txHashHex.startsWith("0x") ? txHashHex : `0x${txHashHex}`;
     return this.#post("/verifier/prepareRequest", {
-      attestationType: this.#pad32(FdcClient.ATTESTATION.referencePayment),
+      attestationType: this.#pad32(FdcClient.ATTESTATION.xrpPayment),
       sourceId: this.sourceId,
-      requestBody: { transactionId: txHashHex },
+      requestBody: { transactionId },
     });
   }
 

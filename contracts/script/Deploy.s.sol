@@ -20,16 +20,17 @@ import {ERC4626VenueAdapter} from "../src/adapters/ERC4626VenueAdapter.sol";
 contract Deploy is Script {
     function run() external {
         address fxrp = vm.envOr("FXRP", address(0x0b6A3645c240605887a5532109323A3E12273dc7));
-        address stxrpVault = vm.envOr("VENUE_STXRP", address(0x4066A1363a04ce3B23eEcB53dEfa65f94A24355E));
-        address earnVault = vm.envOr("VENUE_EARNXRP", address(0xF97B2bBdB2f4a561806e5038a503eCA81554634E));
+        address stxrpVault =
+            vm.envOr("VENUE_STXRP", address(0x4066A1363a04ce3B23eEcB53dEfa65f94A24355E));
+        address earnVault =
+            vm.envOr("VENUE_EARNXRP", address(0xF97B2bBdB2f4a561806e5038a503eCA81554634E));
         address operator = vm.envOr("OPERATOR", msg.sender);
 
         vm.startBroadcast();
 
         // 1. Registry (resolves FDC + FTSO v2 from the on-chain registry)
-        StandingOrderRegistry registry = new StandingOrderRegistry(
-            address(0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019)
-        );
+        StandingOrderRegistry registry =
+            new StandingOrderRegistry(address(0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019));
         console2.log("StandingOrderRegistry:", address(registry));
 
         // 2. Execution controller

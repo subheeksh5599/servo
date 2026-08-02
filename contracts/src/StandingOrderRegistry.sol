@@ -2,8 +2,12 @@
 pragma solidity ^0.8.24;
 
 import {IXRPPayment} from "@flarenetwork/flare-periphery-contracts/flare/IXRPPayment.sol";
-import {IXRPPaymentVerification} from "@flarenetwork/flare-periphery-contracts/flare/IXRPPaymentVerification.sol";
-import {IFlareContractRegistry} from "@flarenetwork/flare-periphery-contracts/flare/IFlareContractRegistry.sol";
+import {
+    IXRPPaymentVerification
+} from "@flarenetwork/flare-periphery-contracts/flare/IXRPPaymentVerification.sol";
+import {
+    IFlareContractRegistry
+} from "@flarenetwork/flare-periphery-contracts/flare/IFlareContractRegistry.sol";
 
 /// @title StandingOrderRegistry
 /// @notice Stores standing orders created by XRPL payments. A payment with a
@@ -106,7 +110,8 @@ contract StandingOrderRegistry {
     /// @param _proof Attested XRPL payment (FDC-verified).
     /// @param _ownerEvm Flare address that holds the FXRP funding this order.
     function registerOrder(IXRPPayment.Proof calldata _proof, address _ownerEvm)
-        external returns (uint256 orderId)
+        external
+        returns (uint256 orderId)
     {
         if (_ownerEvm == address(0)) revert ZeroOwnerEvm();
         if (!IXRPPaymentVerification(flareDataConnector).verifyXRPPayment(_proof)) {
@@ -133,8 +138,14 @@ contract StandingOrderRegistry {
 
         ordersOf[body.sourceAddressHash].push(orderId);
         emit OrderRegistered(
-            orderId, body.sourceAddressHash, amountDrops, cadence,
-            venueId, strategyId, autoExecute, _proof.data.requestBody.transactionId
+            orderId,
+            body.sourceAddressHash,
+            amountDrops,
+            cadence,
+            venueId,
+            strategyId,
+            autoExecute,
+            _proof.data.requestBody.transactionId
         );
     }
 
@@ -171,10 +182,17 @@ contract StandingOrderRegistry {
         return IXRPPaymentVerification(flareDataConnector).verifyXRPPayment(_proof);
     }
 
-    function _decodeMemo(
-        bytes memory _memo,
-        uint64 _receivedDrops
-    ) internal view returns (uint32 cadence, uint64 amountDrops, uint8 venueId, uint8 strategyId, bool autoExecute) {
+    function _decodeMemo(bytes memory _memo, uint64 _receivedDrops)
+        internal
+        view
+        returns (
+            uint32 cadence,
+            uint64 amountDrops,
+            uint8 venueId,
+            uint8 strategyId,
+            bool autoExecute
+        )
+    {
         if (_memo.length < 20) revert BadMemoMagic();
         if (_memo[0] != 0x53 || _memo[1] != 0x52) revert BadMemoMagic(); // "SR"
         if (_memo[2] != 0x01) revert BadMemoVersion();

@@ -30,7 +30,9 @@ contract VenueAdapterTest is Test {
         MockFlareContractRegistry reg = new MockFlareContractRegistry(address(fdc), address(ftsoV2));
         registry = new StandingOrderRegistry(address(reg));
         fxrp = new MockERC20();
-        controller = new ExecutionController(address(registry), address(fxrp), 1_000_000_000_000_000_000_000, 7200);
+        controller = new ExecutionController(
+            address(registry), address(fxrp), 1_000_000_000_000_000_000_000, 7200
+        );
         registry.setController(address(controller));
         controller.setOperator(AGENT);
         ftsoV2.setFeed(1_082_000, 6, uint64(block.timestamp));
@@ -49,9 +51,20 @@ contract VenueAdapterTest is Test {
         vm.prank(USER);
         fxrp.approve(address(controller), type(uint256).max);
 
-        registry.registerOrder(ProofBuilder.buildProof(
-            3600, 5_000_000_000_000_000_000, 1, 1, true, 5_000_000_000_000_000_000, OWNER, 0, bytes32(uint256(1))
-        ), USER);
+        registry.registerOrder(
+            ProofBuilder.buildProof(
+                3600,
+                5_000_000_000_000_000_000,
+                1,
+                1,
+                true,
+                5_000_000_000_000_000_000,
+                OWNER,
+                0,
+                bytes32(uint256(1))
+            ),
+            USER
+        );
         uint256 id = registry.orderCount();
 
         vm.warp(block.timestamp + 3601);

@@ -24,9 +24,7 @@ contract MockVault {
 
     function deposit(uint256 _assets, address _receiver) external returns (uint256 shares) {
         asset.transferFrom(msg.sender, address(this), _assets);
-        shares = totalShares == 0
-            ? _assets
-            : _assets * totalShares / totalAssets_;
+        shares = totalShares == 0 ? _assets : _assets * totalShares / totalAssets_;
         totalAssets_ += _assets;
         totalShares += shares;
         balances[_receiver] += shares;

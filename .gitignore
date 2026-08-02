@@ -17,9 +17,13 @@ docs/media/
 # agent runtime state
 agent/state/
 
+# watcher runtime state (replay protection)
+watcher/state/
+
 # vercel
 .vercel/
 
 # misc
 .DS_Store
 docs/DEMO_SCRIPT.md
+docs/SUBMISSION_DRAFT.md

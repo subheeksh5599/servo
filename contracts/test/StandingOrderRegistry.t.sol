@@ -23,8 +23,14 @@ contract StandingOrderRegistryTest is Test {
         registry = new StandingOrderRegistry(address(reg));
     }
 
-    function _proof(uint32 _cadence, uint64 _amount) internal view returns (IXRPPayment.Proof memory) {
-        return ProofBuilder.buildProof(_cadence, _amount, 0, 1, true, _amount, OWNER, 0, bytes32(uint256(1)));
+    function _proof(uint32 _cadence, uint64 _amount)
+        internal
+        view
+        returns (IXRPPayment.Proof memory)
+    {
+        return ProofBuilder.buildProof(
+            _cadence, _amount, 0, 1, true, _amount, OWNER, 0, bytes32(uint256(1))
+        );
     }
 
     function testRegisterOrderHappyPath() public {
