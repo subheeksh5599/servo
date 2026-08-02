@@ -25,7 +25,7 @@ export function Priority({ level }: { level: "urgent" | "high" | "med" | "low" |
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className={cn("w-[3px] rounded-sm", i < fill ? "bg-[#b9bdc6]" : "bg-white/15")}
+          className={cn("w-[3px] rounded-sm", i < fill ? "bg-foreground/70" : "bg-muted-foreground/30")}
           style={{ height: `${4 + i * 3}px` }}
         />
       ))}
@@ -49,8 +49,8 @@ export function StatusRing({ status }: { status: "running" | "due" | "paused" | 
   }
   if (status === "paused") {
     return (
-      <span className={cn(common, "border-[#626871]")}>
-        <span className="block h-[1px] w-[8px] translate-x-[2px] translate-y-[6.5px] bg-[#626871]" />
+      <span className={cn(common, "border-muted-foreground/60")}>
+        <span className="block h-[1px] w-[8px] translate-x-[2px] translate-y-[6.5px] bg-muted-foreground/60" />
       </span>
     );
   }
@@ -75,9 +75,9 @@ const LABEL_COLORS: Record<string, string> = {
 };
 
 export function LabelPill({ text }: { text: string }) {
-  const color = LABEL_COLORS[text.toLowerCase()] ?? "bg-[#7d828c]";
+  const color = LABEL_COLORS[text.toLowerCase()] ?? "bg-muted-foreground";
   return (
-    <span className="flex items-center gap-1.5 rounded-full border border-white/10 px-2 py-0.5 font-body text-[11px] text-[#b9bdc6]">
+    <span className="flex items-center gap-1.5 rounded-full border px-2 py-0.5 font-body text-[11px] text-muted-foreground">
       <span className={cn("h-1.5 w-1.5 rounded-full", color)} />
       {text}
     </span>
@@ -86,7 +86,7 @@ export function LabelPill({ text }: { text: string }) {
 
 /* ---------- assignee avatar ---------- */
 
-const AVATAR_TINTS = ["bg-[#5e6ad2]/30 text-[#a5b0f0]", "bg-[#f2c94c]/20 text-[#f2c94c]", "bg-[#27ae60]/20 text-[#6fe3a0]", "bg-[#eb5757]/20 text-[#f39c9c]"];
+const AVATAR_TINTS = ["bg-primary/20 text-primary", "bg-[#f2c94c]/20 text-[#f2c94c]", "bg-[#27ae60]/20 text-[#27ae60]", "bg-[#eb5757]/20 text-[#eb5757]"];
 
 export function Avatar({ initials, tint = 0 }: { initials: string; tint?: number }) {
   return (
@@ -108,8 +108,8 @@ export function AvatarStack({ people }: { people: string[] }) {
 
 export function Unassigned() {
   return (
-    <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-dashed border-mist/60">
-      <span className="h-1.5 w-1.5 rounded-full bg-mist/40" />
+    <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full border border-dashed border-muted-foreground/60">
+      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" />
     </span>
   );
 }

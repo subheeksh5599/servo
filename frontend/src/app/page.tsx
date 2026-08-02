@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 export default function Page() {
   return (
-    <>
+    <div className="light">
       <Nav />
       <main>
         <Hero />
@@ -24,6 +24,6 @@ export default function Page() {
         <FinalCta />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

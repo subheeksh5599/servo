@@ -1,8 +1,7 @@
-"use client";
-
 import { ChevronDown, Zap, Settings, ListChecks, ReceiptText, Layers, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
+import { Separator } from "@/components/ui/separator";
 
 export type View = "orders" | "receipts" | "venues" | "agent" | "settings";
 
@@ -31,15 +30,15 @@ export default function Sidebar({
   profileCard: ReactNode;
 }) {
   return (
-    <aside className="fixed left-0 top-0 bottom-0 z-40 flex w-[240px] flex-col border-r border-white/7 bg-rail">
+    <aside className="fixed inset-y-0 left-0 z-40 flex w-[240px] flex-col border-r bg-sidebar text-sidebar-foreground">
       {/* workspace title */}
-      <div className="flex h-[52px] items-center gap-2.5 border-b border-white/7 px-4">
-        <span className="flex-1 font-body text-[13px] font-medium text-ink">Servo</span>
-        <ChevronDown size={14} className="text-mist" />
+      <div className="flex h-[52px] items-center gap-2.5 border-b px-4">
+        <span className="flex-1 font-body text-[13px] font-semibold">Servo</span>
+        <ChevronDown size={14} className="text-muted-foreground" />
       </div>
 
       {/* command search */}
-      <div className="px-4 pt-3">{searchBar}</div>
+      <div className="px-3 pt-3">{searchBar}</div>
 
       {/* primary nav */}
       <nav className="mt-3 space-y-0.5 px-2.5">
@@ -49,13 +48,15 @@ export default function Sidebar({
             onClick={() => onView(v)}
             className={cn(
               "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 font-body text-[13px] transition-colors",
-              view === v ? "bg-indigo/15 font-medium text-ink" : "text-mist hover:bg-white/5"
+              view === v
+                ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+                : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
             )}
           >
             <Icon size={15} />
             {label}
             {v === "orders" && orderCount !== null && (
-              <span className="ml-auto rounded-full bg-white/10 px-1.5 font-mono text-[11px] text-ink">
+              <span className="ml-auto rounded-full bg-muted px-1.5 font-mono text-[11px] text-muted-foreground">
                 {orderCount}
               </span>
             )}
@@ -63,14 +64,16 @@ export default function Sidebar({
         ))}
       </nav>
 
+      <Separator className="my-4" />
+
       {/* system group */}
-      <p className="mt-6 px-5 font-body text-[11px] font-semibold uppercase tracking-wider text-mist/70">
+      <p className="px-5 font-body text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/70">
         System
       </p>
       <nav className="mt-1.5 space-y-0.5 px-2.5">
-        <div className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 font-body text-[13px] text-mist">
+        <div className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 font-body text-[13px] text-muted-foreground">
           <Zap size={15} /> FTSO v2
-          <span className="ml-auto font-mono text-[11px] text-mist/80">
+          <span className="ml-auto font-mono text-[11px] text-muted-foreground/80">
             {live && price !== null ? `$${price.toFixed(4)}` : "—"}
           </span>
         </div>
@@ -78,7 +81,9 @@ export default function Sidebar({
           onClick={() => onView("settings")}
           className={cn(
             "flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 font-body text-[13px] transition-colors",
-            view === "settings" ? "bg-indigo/15 font-medium text-ink" : "text-mist hover:bg-white/5"
+            view === "settings"
+              ? "bg-sidebar-accent font-medium text-sidebar-accent-foreground"
+              : "text-muted-foreground hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground"
           )}
         >
           <Settings size={15} /> Settings
@@ -86,7 +91,7 @@ export default function Sidebar({
       </nav>
 
       {/* profile card */}
-      <div className="mt-auto p-3">{profileCard}</div>
+      <div className="mt-auto border-t p-3">{profileCard}</div>
     </aside>
   );
 }

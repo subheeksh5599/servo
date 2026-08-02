@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Sidebar, { type View } from "@/components/dashboard/Sidebar";
-import HeaderBar, { NewOrderModal } from "@/components/dashboard/HeaderBar";
+import HeaderBar from "@/components/dashboard/HeaderBar";
 import GroupedList from "@/components/dashboard/GroupedList";
 import CommandSearch, { type CommandAction } from "@/components/dashboard/CommandSearch";
 import ProfileDropdown from "@/components/dashboard/ProfileDropdown";
-import { VenuesView, ReceiptsView, AgentView, SettingsView } from "@/components/dashboard/Views";
+import { VenuesView, ReceiptsView, AgentView, SettingsView, NewOrderDialog, DashboardSkeleton } from "@/components/dashboard/Views";
 import type { ServoData, Order } from "@/components/dashboard/types";
 
 // venue display names resolve from on-chain data when the registry is
@@ -84,7 +84,7 @@ export default function Dashboard() {
   const countLabel = data?.deployed ? `${orders.length} orders` : "0 orders";
 
   return (
-    <div className="min-h-screen bg-app font-body text-ink">
+    <div className="min-h-screen bg-background font-body text-foreground">
       <Sidebar
         view={view}
         onView={setView}
@@ -94,7 +94,7 @@ export default function Dashboard() {
         searchBar={<CommandSearch onCommand={handleCommand} />}
         profileCard={<ProfileDropdown onNavigate={(v) => setView(v)} onConnect={() => setNewOrderOpen(true)} />}
       />
-      <main className="ml-[240px] bg-pane">
+      <main className="ml-[240px] min-h-screen bg-background">
         <HeaderBar
           tab={tab}
           onTab={setTab}
@@ -102,13 +102,14 @@ export default function Dashboard() {
           countLabel={countLabel}
           onNewOrder={() => setNewOrderOpen(true)}
         />
-        {view === "orders" && <GroupedList data={{ ...data, orders } as unknown as ServoData} tab={tab} />}
-        {view === "receipts" && <ReceiptsView data={data ?? ({} as ServoData)} />}
-        {view === "venues" && <VenuesView data={data ?? ({} as ServoData)} />}
-        {view === "agent" && <AgentView data={data ?? ({} as ServoData)} />}
-        {view === "settings" && <SettingsView data={data ?? ({} as ServoData)} />}
+        {data === null && <DashboardSkeleton />}
+        {data !== null && view === "orders" && <GroupedList data={{ ...data, orders } as unknown as ServoData} tab={tab} />}
+        {data !== null && view === "receipts" && <ReceiptsView data={data} />}
+        {data !== null && view === "venues" && <VenuesView data={data} />}
+        {data !== null && view === "agent" && <AgentView data={data} />}
+        {data !== null && view === "settings" && <SettingsView data={data} />}
       </main>
-      <NewOrderModal open={newOrderOpen} onClose={() => setNewOrderOpen(false)} />
+      <NewOrderDialog open={newOrderOpen} onOpenChange={setNewOrderOpen} />
     </div>
   );
 }

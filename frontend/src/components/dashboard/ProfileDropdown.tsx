@@ -37,7 +37,7 @@ export default function ProfileDropdown({
   const menuItems: MenuItem[] = [
     {
       label: "Connect wallet",
-      icon: <Wallet className="h-4 w-4 text-indigo" />,
+      icon: <Wallet className="h-4 w-4 text-primary" />,
       onSelect: onConnect,
     },
     {
@@ -65,18 +65,18 @@ export default function ProfileDropdown({
         <div className="group relative">
           <DropdownMenuTrigger asChild>
             <button
-              className="flex w-full items-center gap-3 rounded-xl border border-white/7 bg-pane p-3 transition-all duration-200 hover:border-white/15 hover:bg-white/5 focus:outline-none"
+              className="flex w-full items-center gap-3 rounded-xl border border-border bg-background p-3 transition-all duration-200 hover:border-border hover:bg-accent/60 focus:outline-none"
               type="button"
             >
               <div className="flex-1 text-left">
-                <div className="font-body text-[13px] font-medium leading-tight text-ink">
+                <div className="font-body text-[13px] font-medium leading-tight text-foreground">
                   Not connected
                 </div>
-                <div className="font-body text-[11px] leading-tight text-mist">
+                <div className="font-body text-[11px] leading-tight text-muted-foreground">
                   connect wallet · sign once
                 </div>
               </div>
-              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-mist/50 font-body text-[10px] text-mist">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-mist/50 font-body text-[10px] text-muted-foreground">
                 —
               </span>
             </button>
@@ -93,7 +93,7 @@ export default function ProfileDropdown({
               aria-hidden="true"
               className={cn(
                 "transition-all duration-200",
-                isOpen ? "scale-110 text-indigo" : "text-mist group-hover:text-ink"
+                isOpen ? "scale-110 text-primary" : "text-muted-foreground group-hover:text-foreground"
               )}
               fill="none"
               height="24"
@@ -112,7 +112,7 @@ export default function ProfileDropdown({
 
           <DropdownMenuContent
             align="end"
-            className="w-64 origin-top-right rounded-xl border border-white/10 bg-rail p-2 shadow-xl shadow-black/40 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 dark:border-white/10"
+            className="w-64 origin-top-right rounded-xl border border-border bg-popover p-2 shadow-lg data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 dark:border-border"
             sideOffset={6}
           >
             <div className="space-y-1">
@@ -123,15 +123,15 @@ export default function ProfileDropdown({
                       href={item.href}
                       target={item.external ? "_blank" : undefined}
                       rel={item.external ? "noopener noreferrer" : undefined}
-                      className="flex cursor-pointer items-center rounded-lg border border-transparent p-3 transition-all duration-200 hover:border-white/10 hover:bg-white/5"
+                      className="flex cursor-pointer items-center rounded-lg border border-transparent p-3 transition-all duration-200 hover:border-border hover:bg-accent/60"
                     >
                       <div className="flex flex-1 items-center gap-2.5">
                         {item.icon}
-                        <span className="whitespace-nowrap font-body text-[13px] font-medium text-ink">
+                        <span className="whitespace-nowrap font-body text-[13px] font-medium text-foreground">
                           {item.label}
                         </span>
                       </div>
-                      {item.external && <ExternalLink className="h-3.5 w-3.5 text-mist" />}
+                      {item.external && <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />}
                     </a>
                   </DropdownMenuItem>
                 ) : (
@@ -139,11 +139,11 @@ export default function ProfileDropdown({
                     <button
                       type="button"
                       onClick={item.onSelect}
-                      className="flex w-full cursor-pointer items-center rounded-lg border border-transparent p-3 transition-all duration-200 hover:border-white/10 hover:bg-white/5"
+                      className="flex w-full cursor-pointer items-center rounded-lg border border-transparent p-3 transition-all duration-200 hover:border-border hover:bg-accent/60"
                     >
                       <div className="flex flex-1 items-center gap-2.5">
                         {item.icon}
-                        <span className="whitespace-nowrap font-body text-[13px] font-medium text-ink">
+                        <span className="whitespace-nowrap font-body text-[13px] font-medium text-foreground">
                           {item.label}
                         </span>
                       </div>
@@ -154,7 +154,7 @@ export default function ProfileDropdown({
             </div>
 
             <DropdownMenuSeparator className="my-3 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            <p className="px-3 pb-1 font-mono text-[10px] uppercase tracking-widest text-mist/70">
+            <p className="px-3 pb-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
               no session · everything stays on-chain
             </p>
           </DropdownMenuContent>
