@@ -11,9 +11,11 @@ import type { ServoData, Order } from "./types";
 export default function GroupedList({
   data,
   tab,
+  search,
 }: {
   data: ServoData;
   tab: "all" | "active" | "due";
+  search?: string;
 }) {
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
 
@@ -22,9 +24,14 @@ export default function GroupedList({
     status: o.active ? (Date.now() / 1000 >= o.nextExecutionAt ? "due" : "running") : "paused",
   }));
 
+  const q = (search ?? "").trim().toLowerCase();
   const visible = orders.filter((o) => {
-    if (tab === "active") return o.status !== "paused";
-    if (tab === "due") return o.status === "due";
+    if (tab === "active" && o.status === "paused") return false;
+    if (tab === "due" && o.status !== "due") return false;
+    if (q) {
+      const hay = `SRV-${String(o.id).padStart(3, "0")} ${o.amountXrp} ${o.venueLabel} ${o.ownerEvm}`.toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
     return true;
   });
 

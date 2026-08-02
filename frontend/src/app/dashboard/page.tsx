@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Sidebar, { type View } from "@/components/dashboard/Sidebar";
-import HeaderBar from "@/components/dashboard/HeaderBar";
+import HeaderBar, { NewOrderModal } from "@/components/dashboard/HeaderBar";
 import GroupedList from "@/components/dashboard/GroupedList";
 import { VenuesView, ReceiptsView, AgentView, SettingsView } from "@/components/dashboard/Views";
 import type { ServoData, Order } from "@/components/dashboard/types";
@@ -20,6 +20,8 @@ export default function Dashboard() {
   const [data, setData] = useState<ServoData | null>(null);
   const [price, setPrice] = useState<number | null>(null);
   const [live, setLive] = useState(false);
+  const [search, setSearch] = useState("");
+  const [newOrderOpen, setNewOrderOpen] = useState(false);
 
   useEffect(() => {
     let m = true;
@@ -74,15 +76,30 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-app font-body text-ink">
-      <Sidebar view={view} onView={setView} orderCount={data?.deployed ? orders.length : null} live={live} price={price} />
+      <Sidebar
+        view={view}
+        onView={setView}
+        orderCount={data?.deployed ? orders.length : null}
+        live={live}
+        price={price}
+        search={search}
+        onSearch={setSearch}
+      />
       <main className="ml-[240px] bg-pane">
-        <HeaderBar tab={tab} onTab={setTab} title={view === "orders" ? "Orders" : view === "receipts" ? "Receipts" : view === "venues" ? "Venues" : view === "agent" ? "Agent" : "Settings"} countLabel={countLabel} />
-        {view === "orders" && <GroupedList data={{ ...data, orders } as unknown as ServoData} tab={tab} />}
+        <HeaderBar
+          tab={tab}
+          onTab={setTab}
+          title={view === "orders" ? "Orders" : view === "receipts" ? "Receipts" : view === "venues" ? "Venues" : view === "agent" ? "Agent" : "Settings"}
+          countLabel={countLabel}
+          onNewOrder={() => setNewOrderOpen(true)}
+        />
+        {view === "orders" && <GroupedList data={{ ...data, orders } as unknown as ServoData} tab={tab} search={search} />}
         {view === "receipts" && <ReceiptsView data={data ?? ({} as ServoData)} />}
         {view === "venues" && <VenuesView data={data ?? ({} as ServoData)} />}
         {view === "agent" && <AgentView data={data ?? ({} as ServoData)} />}
         {view === "settings" && <SettingsView data={data ?? ({} as ServoData)} />}
       </main>
+      <NewOrderModal open={newOrderOpen} onClose={() => setNewOrderOpen(false)} />
     </div>
   );
 }
