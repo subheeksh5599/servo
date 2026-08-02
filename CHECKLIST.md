@@ -5,7 +5,19 @@
 > **Hackathon:** Flare Summer Signal 2026 · **Bounty:** 1 — Interoperable Asset Products
 > **Deadline:** Aug 14, 2026 · **Docs:** https://dev.flare.network/
 
-How to use this file: tick boxes as you finish things. Every item is needed for the build to be complete — big and small. If an item is not applicable, mark it `[x]` and write "N/A" next to it so nobody re-reads it.
+## BUILD STATUS (actual, 2026-08-02)
+
+- [x] Phase 0 — repo, Foundry, env, LICENSE, README, addresses docs
+- [x] Phase 1 — FSA/FAssets/FDC/FTSO research; all addresses verified on-chain (docs/addresses.md)
+- [x] Phase 2 — contracts: StandingOrderRegistry + ExecutionController + ERC4626VenueAdapter, **24/24 tests green**; deployed to a Coston2 fork with real protocol addresses (registry 0xE97166C46816d48B2aFFCfFf704B962E88fd0abE, controller 0xC5123B98c3A0aa1a4F9390BCf76f7B9D775a5687)
+- [x] Phase 3 — watcher: XRPL payment stream → FDC attestation → registerOrder (code complete; live submit blocked by verifier WAF from build env — documented)
+- [x] Phase 4 — indexer: 7/30d realized APY from real adapter exchange rates; proven against fork (TESTearnXRP rate 1.001100009020019019)
+- [x] Phase 5 — agent: venue scoring, confidence (freshness+count), auto-execute ≥70%, one-signature ask below; ticked against fork
+- [x] Phase 6 — frontend REMOVED by user decision (backend focus); landing page shipped separately at servo-cyan.vercel.app (superseded)
+- [~] Phase 7 — E2E: real XRPL testnet payment broadcast (tx E715FA55…, tesSUCCESS, Servo memo); contracts exercised on Coston2 fork; live attestation→mint leg ready but verifier WAF-blocked from this machine
+- [x] Phase 8 — edge cases in tests (caps, breaker, stale price, inactive, unverified proof); `git grep` secret sweep clean; no mock data anywhere
+- [~] Phase 9 — submission package: README complete; DEMO_SCRIPT.md local-only; remaining: DoraHacks form + video (user)
+- [ ] Phase 10 — stretch: FBTC/FDOGE standing orders, auto-redeem, FCC strategy (roadmap only)
 
 ## PROJECT RULES (non-negotiable)
 
