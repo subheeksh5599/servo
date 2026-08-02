@@ -1,23 +1,24 @@
-import ConsoleNav from "@/components/ConsoleNav";
-import MachineHero from "@/components/MachineHero";
-import AuditFeed from "@/components/AuditFeed";
-import FigSections from "@/components/FigSections";
-import WhyFlare from "@/components/WhyFlare";
+import SmoothScroll from "@/components/SmoothScroll";
+import Nav from "@/components/Nav";
+import Hero from "@/components/Hero";
+import Pipeline from "@/components/Pipeline";
+import Manifesto from "@/components/Manifesto";
+import Protocols from "@/components/Protocols";
 import Roadmap from "@/components/Roadmap";
 import Footer from "@/components/Footer";
 
 export default function Page() {
   return (
-    <>
-      <ConsoleNav />
+    <SmoothScroll>
+      <Nav />
       <main>
-        <MachineHero />
-        <AuditFeed />
-        <FigSections />
-        <WhyFlare />
+        <Hero />
+        <Pipeline />
+        <Manifesto />
+        <Protocols />
         <Roadmap />
       </main>
       <Footer />
-    </>
+    </SmoothScroll>
   );
 }

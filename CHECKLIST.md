@@ -1,6 +1,6 @@
-# XRP Standing Orders — Build Checklist
+# Servo — Build Checklist
 
-> **Project:** XRP Standing Orders — "Sign once, your XRP works forever."
+> **Project:** Servo — "Sign once, your XRP works forever." (recurring money for XRP on Flare)
 > Recurring money automation for XRP on Flare (DCA, subscriptions, auto-sweep) with an agent that re-routes capital to the best yield venue.
 > **Hackathon:** Flare Summer Signal 2026 · **Bounty:** 1 — Interoperable Asset Products
 > **Deadline:** Aug 14, 2026 · **Docs:** https://dev.flare.network/
@@ -21,12 +21,12 @@ How to use this file: tick boxes as you finish things. Every item is needed for 
 
 ## PHASE 0 — Project setup
 
-- [ ] Create GitHub repo named `standing-orders` (or similar), push initial commit
+- [x] Create GitHub repo named `servo`, push initial commit
 - [ ] Write `.gitignore` (node_modules, .env, cache, out/, broadcast/, docs/media)
 - [ ] Create `.env.example` with all env var names and comments (never commit real .env)
 - [ ] Add README.md skeleton (fill fully in Phase 9)
 - [ ] Add LICENSE (MIT or Apache-2.0)
-- [ ] Decide project name for submission (working title: XRP Standing Orders)
+- [x] Decide project name for submission: Servo
 - [ ] Set up Foundry (forge init in contracts/)
 - [ ] Set up frontend scaffold (Next.js + TypeScript + viem)
 - [ ] Set up agent service scaffold (Node/TypeScript or Python)

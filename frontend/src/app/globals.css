@@ -2,36 +2,150 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
+@layer base {
+  :root {
+    --background: 0 0% 4%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 7%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 248 75% 64%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 11%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 11%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 248 75% 64%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 248 75% 64%;
+    --radius: 0.75rem;
+  }
 }
 
-body {
-  @apply bg-[#0B0B0E] text-[#E8E8E6] font-mono antialiased;
-  font-family: var(--font-jetbrains);
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  ::selection {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
 }
 
-::selection {
-  background: #09fd67;
-  color: #0b0b0e;
+/* ---------- kinetic word reveal ---------- */
+
+.w-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
 }
 
-/* ---------- tokens ---------- */
-
-.chip {
-  @apply inline-flex items-center gap-1.5 border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.18em];
+.w-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(115%);
+  transition:
+    opacity 0.7s ease,
+    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
 }
 
-.chip-live {
-  @apply border-[#09FD67]/40 text-[#09FD67];
+.w-word.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.chip-dim {
-  @apply border-white/10 text-white/35;
+@media (prefers-reduced-motion: reduce) {
+  .w-word {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
+
+/* ---------- reveal ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- aurora art ---------- */
+
+.aurora-1,
+.aurora-2,
+.aurora-3 {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: auroraDrift 22s ease-in-out infinite alternate;
+}
+
+.aurora-2 {
+  animation-duration: 28s;
+  animation-delay: -6s;
+}
+
+.aurora-3 {
+  animation-duration: 34s;
+  animation-delay: -12s;
+}
+
+@keyframes auroraDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(4%, -6%) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora-1,
+  .aurora-2,
+  .aurora-3 {
+    animation: none;
+  }
+}
+
+/* ---------- section label ---------- */
+
+.sec-label {
+  @apply font-mono text-[0.6875rem] uppercase tracking-[0.22em] text-muted-foreground;
+}
+
+.sec-label::before {
+  content: "";
+  @apply inline-block w-6 h-px align-middle mr-3 bg-primary;
+}
+
+/* ---------- live dot ---------- */
 
 .live-dot {
-  @apply inline-block h-1.5 w-1.5 rounded-full bg-[#09FD67];
+  @apply inline-block h-1.5 w-1.5 rounded-full bg-primary;
   animation: blink 2s steps(2, start) infinite;
 }
 
@@ -42,68 +156,5 @@ body {
   }
   50% {
     opacity: 0.15;
-  }
-}
-
-/* ---------- node graph ---------- */
-
-.node {
-  @apply relative border bg-[#121216] px-4 py-3;
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.node-title {
-  @apply font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-white/80;
-}
-
-.node-sub {
-  @apply mt-1 font-mono text-[0.625rem] text-white/35;
-}
-
-.edge {
-  @apply flex items-center justify-center;
-  color: rgba(255, 255, 255, 0.15);
-}
-
-.edge-line {
-  height: 1px;
-  flex: 1;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.edge-arrow {
-  font-size: 0.625rem;
-}
-
-/* ---------- audit feed ---------- */
-
-.log-line {
-  @apply flex gap-3 font-mono text-[0.6875rem] leading-relaxed;
-  color: rgba(232, 232, 230, 0.55);
-}
-
-.log-ts {
-  color: rgba(232, 232, 230, 0.25);
-  white-space: nowrap;
-}
-
-.log-ok {
-  color: #09fd67;
-}
-
-/* ---------- section label ---------- */
-
-.sec-label {
-  @apply font-mono text-[0.6875rem] uppercase tracking-[0.22em] text-white/40;
-}
-
-.sec-label::before {
-  content: "";
-  @apply inline-block w-6 h-px align-middle mr-3 bg-[#09FD67];
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .live-dot {
-    animation: none;
   }
 }
