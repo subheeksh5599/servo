@@ -1,4 +1,4 @@
-import { ChevronDown, Zap, Settings, ListChecks, ReceiptText, Layers, Bot } from "lucide-react";
+import { Zap, Settings, ListChecks, ReceiptText, Layers, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 import { Separator } from "@/components/ui/separator";
@@ -31,10 +31,14 @@ export default function Sidebar({
 }) {
   return (
     <aside className="fixed inset-y-0 left-0 z-40 flex w-[240px] flex-col border-r bg-sidebar text-sidebar-foreground">
-      {/* workspace title */}
-      <div className="flex h-[52px] items-center gap-2.5 border-b px-4">
-        <span className="flex-1 font-body text-[13px] font-semibold">Servo</span>
-        <ChevronDown size={14} className="text-muted-foreground" />
+      {/* workspace title — links to the landing page */}
+      <div className="flex h-[52px] items-center border-b px-4">
+        <a
+          href="/"
+          className="font-body text-lg font-semibold tracking-tight text-foreground transition-colors hover:text-primary"
+        >
+          Servo<span className="text-primary">.</span>
+        </a>
       </div>
 
       {/* command search */}
