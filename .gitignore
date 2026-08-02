@@ -1,6 +1,21 @@
-node_modules/
+# env
 .env
 .env.*
 !.env.example
+
+# node
+node_modules/
+
+# foundry
+cache/
+out/
+broadcast/
+
+# docs media (local only)
 docs/media/
+
+# vercel
 .vercel/
+
+# misc
+.DS_Store
