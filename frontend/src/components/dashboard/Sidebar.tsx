@@ -143,12 +143,12 @@ export default function Sidebar({
 
       {/* user card */}
       <div className="mt-auto flex items-center gap-2.5 border-t border-white/7 p-4">
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sage/20 font-body text-[11px] font-medium text-sage">
-          XR
+        <span className="flex h-7 w-7 items-center justify-center rounded-full border border-dashed border-mist/50 font-body text-[10px] text-mist">
+          —
         </span>
         <div className="flex-1">
-          <p className="font-body text-[13px] font-medium text-ink">XRP Holder</p>
-          <p className="font-body text-[11px] text-mist">Online · @holder</p>
+          <p className="font-body text-[13px] font-medium text-ink">Not connected</p>
+          <p className="font-body text-[11px] text-mist">connect wallet · sign once</p>
         </div>
         <MoreHorizontal size={15} className="text-mist" />
       </div>

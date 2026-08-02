@@ -5,40 +5,21 @@ import { motion } from "framer-motion";
 import { Wifi, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// Structural card types — a card becomes a real standing order only when a
+// verified payment registers it. No fabricated values here.
 interface CardData {
   id: string;
   type: "gold" | "silver" | "platinum";
-  code: string;
-  sub: string;
-  holder: string;
-  expiry: string;
+  kind: string;
+  line: string;
+  owner: string;
+  cycle: string;
 }
 
 const CARDS: CardData[] = [
-  {
-    id: "1",
-    type: "gold",
-    code: "5352 · 01 · 0E10",
-    sub: "STANDING ORDER",
-    holder: "DCA HOURLY",
-    expiry: "25 XRP",
-  },
-  {
-    id: "2",
-    type: "silver",
-    code: "FXRP · VAULT",
-    sub: "YIELD VAULT",
-    holder: "EARN XRP",
-    expiry: "AUTO",
-  },
-  {
-    id: "3",
-    type: "platinum",
-    code: "AGENT · 70%",
-    sub: "STRATEGY AGENT",
-    holder: "ROUTE-TO-BEST",
-    expiry: "SIGNED",
-  },
+  { id: "1", type: "gold", kind: "ORDER", line: "cadence · amount · venue", owner: "YOURS", cycle: "FOREVER" },
+  { id: "2", type: "silver", kind: "VAULT", line: "FXRP · best realized yield", owner: "YOURS", cycle: "AUTO" },
+  { id: "3", type: "platinum", kind: "AGENT", line: "routes at ≥70% confidence", owner: "YOURS", cycle: "SIGNED" },
 ];
 
 function WalletCard({
@@ -77,7 +58,7 @@ function WalletCard({
       className={cn(
         "absolute left-0 w-full h-[200px] rounded-xl cursor-pointer shadow-xl overflow-hidden transform-gpu border border-white/10",
         isGold && "bg-gradient-to-br from-[#FFE17C] via-[#D9A93F] to-[#8A6A1F]",
-        isSilver(data) && "bg-gradient-to-br from-[#E2E2E2] via-[#9CA3AF] to-[#4B5563]",
+        data.type === "silver" && "bg-gradient-to-br from-[#E2E2E2] via-[#9CA3AF] to-[#4B5563]",
         isPlatinum && "bg-gradient-to-br from-[#171E19] via-[#272727] to-[#0B0D0C]"
       )}
       style={{ transformStyle: "preserve-3d", top: "-45px", transformOrigin: "bottom center" }}
@@ -85,39 +66,35 @@ function WalletCard({
       <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_30%_20%,#ffffff66,transparent_60%)] pointer-events-none" />
       <div className="relative p-5 h-full flex flex-col justify-between font-mono select-none">
         <div className="flex justify-between items-start">
-          <span className={cn("display text-sm tracking-wide", isGold || isSilver(data) ? "text-charcoal" : "text-butter")}>
+          <span className={cn("display text-sm tracking-wide", isGold || data.type === "silver" ? "text-charcoal" : "text-butter")}>
             servo
           </span>
-          <Wifi className={cn("w-5 h-5 rotate-90", isGold || isSilver(data) ? "text-charcoal/60" : "text-butter/60")} />
+          <Wifi className={cn("w-5 h-5 rotate-90", isGold || data.type === "silver" ? "text-charcoal/60" : "text-butter/60")} />
         </div>
         <div className="space-y-2">
-          <p className={cn("text-lg tracking-widest font-bold", isGold || isSilver(data) ? "text-charcoal" : "text-paper/80")}>
-            {data.code}
+          <p className={cn("text-lg tracking-widest font-bold", isGold || data.type === "silver" ? "text-charcoal" : "text-paper/80")}>
+            {data.kind}
           </p>
           <div className="flex justify-between items-end">
             <div>
-              <p className={cn("text-[9px] uppercase opacity-70", isGold || isSilver(data) ? "text-charcoal" : "text-paper/50")}>
-                {data.sub}
+              <p className={cn("text-[9px] uppercase opacity-70", isGold || data.type === "silver" ? "text-charcoal" : "text-paper/50")}>
+                {data.line}
               </p>
-              <p className={cn("text-xs font-bold tracking-wide uppercase", isGold || isSilver(data) ? "text-charcoal" : "text-paper")}>
-                {data.holder}
+              <p className={cn("text-xs font-bold tracking-wide uppercase", isGold || data.type === "silver" ? "text-charcoal" : "text-paper")}>
+                {data.owner}
               </p>
             </div>
             <div className="text-right">
-              <p className={cn("text-[9px] uppercase opacity-70", isGold || isSilver(data) ? "text-charcoal" : "text-paper/50")}>
-                per cycle
+              <p className={cn("text-[9px] uppercase opacity-70", isGold || data.type === "silver" ? "text-charcoal" : "text-paper/50")}>
+                duration
               </p>
-              <p className={cn("text-xs font-bold", isGold || isSilver(data) ? "text-charcoal" : "text-paper")}>{data.expiry}</p>
+              <p className={cn("text-xs font-bold", isGold || data.type === "silver" ? "text-charcoal" : "text-paper")}>{data.cycle}</p>
             </div>
           </div>
         </div>
       </div>
     </motion.div>
   );
-}
-
-function isSilver(c: CardData) {
-  return c.type === "silver";
 }
 
 export default function Wallet() {
@@ -161,15 +138,15 @@ export default function Wallet() {
             <span className="text-butter">Your cards.</span>
           </h2>
           <p className="mt-6 max-w-md font-body text-lg leading-relaxed text-sage">
-            Each Servo card is a live standing order · one signature created
-            it, and the machine runs it forever. Hover to fan them out. Click
-            one to focus it.
+            Each card is a standing order you create with one XRPL signature.
+            Sign one and your cards fill with real data. Until then, the
+            wallet shows the live price and nothing more.
           </p>
           <p className="mt-8 flex items-center gap-3 font-mono text-sm text-sage/70">
             <span className="live-dot" />
             XRP/USD{" "}
             <span className="text-butter">
-              {live && price !== null ? `$${price.toFixed(6)}` : ""}
+              {live && price !== null ? `$${price.toFixed(6)}` : "loading"}
             </span>
             <span className="text-sage/40">live from FTSO v2</span>
           </p>
@@ -208,13 +185,13 @@ export default function Wallet() {
                 <div className="absolute inset-3 rounded-xl border border-dashed border-white/10 opacity-50" />
                 <div className="relative z-10 flex flex-col items-center gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#5C7066]">
-                    Standing orders
+                    XRP/USD · FTSO v2
                   </span>
                   <span className="font-mono text-3xl text-[#E0E0E0]">
-                    {CARDS.length} active
+                    {live && price !== null ? `$${price.toFixed(6)}` : "—"}
                   </span>
                   <span className="font-body text-xs text-[#5C7066]">
-                    one signature · runs forever
+                    sign once · your orders appear here
                   </span>
                 </div>
               </motion.div>

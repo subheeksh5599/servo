@@ -1,4 +1,5 @@
 import { Signature, Coins, Bot, ReceiptText, ShieldCheck, LineChart } from "lucide-react";
+import LivePrice from "./LivePrice";
 
 export default function Bento() {
   return (
@@ -75,12 +76,11 @@ export default function Bento() {
                   asks for one signature.
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                {["FIRELIGHT", "KINETIC", "CLEARSTAR"].map((v, i) => (
+              <div className="flex flex-wrap items-center gap-2">
+                {["≥70% auto", "below · one signature", "receipt every run"].map((v) => (
                   <span
                     key={v}
                     className="rounded-full border border-charcoal/15 px-3 py-1.5 font-mono text-[10px] tracking-wider text-charcoal/60"
-                    style={{ opacity: 1 - i * 0.25 }}
                   >
                     {v}
                   </span>
@@ -118,14 +118,11 @@ export default function Bento() {
                   stale feeds block execution. No external price sources.
                 </p>
               </div>
-              <div className="flex items-end gap-1.5">
-                {[40, 65, 50, 80, 60, 95].map((h, i) => (
-                  <span
-                    key={i}
-                    className="w-6 bg-butter"
-                    style={{ height: `${h}px` }}
-                  />
-                ))}
+              <div className="flex items-end gap-3">
+                <LivePrice className="display text-3xl text-charcoal" />
+                <span className="pb-1 font-mono text-[10px] uppercase tracking-widest text-charcoal/40">
+                  XRP/USD · FTSO v2 · live
+                </span>
               </div>
             </div>
           </div>
@@ -141,15 +138,19 @@ export default function Bento() {
                   verifiable on-chain event. Prove any of it, any time.
                 </p>
               </div>
-              <div className="flex -space-x-2">
-                {["AX", "JM", "KR", "TB"].map((n) => (
-                  <span
-                    key={n}
-                    className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-charcoal bg-sage font-display text-sm text-charcoal grayscale"
-                  >
-                    {n}
-                  </span>
-                ))}
+              <div className="flex flex-col gap-1.5">
+                <span className="flex items-center gap-2 font-mono text-[11px] text-charcoal/50">
+                  <span className="h-1.5 w-1.5 rounded-full bg-butter" />
+                  orderId · amountDrops · priceXrpUsd
+                </span>
+                <span className="flex items-center gap-2 font-mono text-[11px] text-charcoal/50">
+                  <span className="h-1.5 w-1.5 rounded-full bg-charcoal/20" />
+                  venueId · venueAdapter · transactionId
+                </span>
+                <span className="flex items-center gap-2 font-mono text-[11px] text-charcoal/50">
+                  <span className="h-1.5 w-1.5 rounded-full bg-sage" />
+                  timestamp · block · txHash
+                </span>
               </div>
             </div>
           </div>

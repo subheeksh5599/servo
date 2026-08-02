@@ -7,7 +7,12 @@ import GroupedList from "@/components/dashboard/GroupedList";
 import { VenuesView, ReceiptsView, AgentView, SettingsView } from "@/components/dashboard/Views";
 import type { ServoData, Order } from "@/components/dashboard/types";
 
-const VENUE_LABELS = ["FXRP", "stXRP", "earnXRP", "V3", "V4"];
+// venue display names resolve from on-chain data when the registry is
+// deployed; V{id} is a structural id, never a fabricated name.
+function venueName(venueId: number, data: ServoData): string {
+  const v = data.venues.find((x) => x.venueId === venueId);
+  return v?.name || `V${venueId}`;
+}
 
 export default function Dashboard() {
   const [view, setView] = useState<View>("orders");
@@ -51,7 +56,7 @@ export default function Dashboard() {
       amountXrp,
       cadenceHours: Number(rec.cadenceSeconds ?? 3600) / 3600,
       venueId: Number(rec.venueId ?? 0),
-      venueLabel: VENUE_LABELS[Number(rec.venueId ?? 0)] ?? `V${rec.venueId}`,
+      venueLabel: venueName(Number(rec.venueId ?? 0), data ?? ({} as ServoData)),
       autoExecute: Boolean(rec.autoExecute),
       active: Boolean(rec.active),
       nextExecutionAt: Number(rec.nextExecutionAt ?? 0),
