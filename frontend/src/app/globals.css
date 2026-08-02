@@ -7,135 +7,31 @@
 }
 
 body {
-  @apply bg-ink text-paper font-mono antialiased;
+  @apply bg-[#0B0B0E] text-[#E8E8E6] font-mono antialiased;
+  font-family: var(--font-jetbrains);
 }
 
 ::selection {
-  background: #c10f45;
-  color: #edede8;
+  background: #09fd67;
+  color: #0b0b0e;
 }
 
-/* ---------- type helpers ---------- */
+/* ---------- tokens ---------- */
 
-.fig-label {
-  @apply font-mono text-[0.6875rem] uppercase tracking-[0.22em] text-paper/40;
+.chip {
+  @apply inline-flex items-center gap-1.5 border px-2 py-0.5 font-mono text-[0.625rem] uppercase tracking-[0.18em];
 }
 
-.fig-label::before {
-  content: "";
-  @apply inline-block w-8 h-px align-middle mr-3 bg-accent;
+.chip-live {
+  @apply border-[#09FD67]/40 text-[#09FD67];
 }
 
-.dim-label {
-  @apply font-mono text-[0.625rem] uppercase tracking-[0.2em] text-paper/30;
+.chip-dim {
+  @apply border-white/10 text-white/35;
 }
 
-.text-outline {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(237, 237, 232, 0.3);
-}
-
-.text-outline-faint {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(237, 237, 232, 0.12);
-}
-
-/* ---------- kinetic words ---------- */
-
-.w-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: bottom;
-}
-
-.w-word {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(115%);
-  transition:
-    opacity 0.7s ease,
-    transform 1s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: transform;
-}
-
-.w-word.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.hero-word {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* ---------- blueprint drawing ---------- */
-
-.blueprint-grid {
-  background-image:
-    linear-gradient(rgba(237, 237, 232, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(237, 237, 232, 0.035) 1px, transparent 1px);
-  background-size: 96px 96px;
-}
-
-.crosshair {
-  position: relative;
-  width: 14px;
-  height: 14px;
-}
-
-.crosshair::before,
-.crosshair::after {
-  content: "";
-  position: absolute;
-  background: rgba(237, 237, 232, 0.35);
-}
-
-.crosshair::before {
-  left: 50%;
-  top: 0;
-  width: 1px;
-  height: 100%;
-}
-
-.crosshair::after {
-  top: 50%;
-  left: 0;
-  height: 1px;
-  width: 100%;
-}
-
-.bp-row {
-  opacity: 0.12;
-  transform: translateY(28px);
-}
-
-/* ---------- marquee ---------- */
-
-.marquee {
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.marquee__inner {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  animation: marqueeScroll 36s linear infinite;
-  will-change: transform;
-}
-
-@keyframes marqueeScroll {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-/* ---------- misc ---------- */
-
-.blink {
+.live-dot {
+  @apply inline-block h-1.5 w-1.5 rounded-full bg-[#09FD67];
   animation: blink 2s steps(2, start) infinite;
 }
 
@@ -149,40 +45,65 @@ body {
   }
 }
 
-.nav-link {
-  position: relative;
+/* ---------- node graph ---------- */
+
+.node {
+  @apply relative border bg-[#121216] px-4 py-3;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
-.nav-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-  width: 100%;
+.node-title {
+  @apply font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-white/80;
+}
+
+.node-sub {
+  @apply mt-1 font-mono text-[0.625rem] text-white/35;
+}
+
+.edge {
+  @apply flex items-center justify-center;
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.edge-line {
   height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  flex: 1;
+  background: rgba(255, 255, 255, 0.15);
 }
 
-.nav-link:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.edge-arrow {
+  font-size: 0.625rem;
+}
+
+/* ---------- audit feed ---------- */
+
+.log-line {
+  @apply flex gap-3 font-mono text-[0.6875rem] leading-relaxed;
+  color: rgba(232, 232, 230, 0.55);
+}
+
+.log-ts {
+  color: rgba(232, 232, 230, 0.25);
+  white-space: nowrap;
+}
+
+.log-ok {
+  color: #09fd67;
+}
+
+/* ---------- section label ---------- */
+
+.sec-label {
+  @apply font-mono text-[0.6875rem] uppercase tracking-[0.22em] text-white/40;
+}
+
+.sec-label::before {
+  content: "";
+  @apply inline-block w-6 h-px align-middle mr-3 bg-[#09FD67];
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .w-word,
-  .hero-word {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-  .marquee__inner {
+  .live-dot {
     animation: none;
-  }
-  .bp-row {
-    opacity: 1;
-    transform: none;
   }
 }

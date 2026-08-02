@@ -2,7 +2,7 @@ const ITEMS = [
   {
     n: "05",
     label: "FBTC",
-    title: "Standing orders for Bitcoin",
+    title: "Standing orders for bitcoin",
     desc: "FAssets v2 brings FBTC, FDOGE, FLTC. The same automation, architected for the next assets from day one.",
   },
   {
@@ -21,36 +21,38 @@ const ITEMS = [
 
 export default function Roadmap() {
   return (
-    <section id="roadmap" className="relative overflow-hidden px-6 py-44">
-      <div className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none whitespace-nowrap font-display text-[16vw] font-bold uppercase tracking-[-0.04em] text-outline-faint">
-        Next
-      </div>
-      <div className="relative mx-auto w-full max-w-6xl">
-        <p className="fig-label reveal">Roadmap</p>
-        <h2 className="reveal mt-8 font-display text-4xl font-bold leading-[0.95] tracking-[-0.035em] text-paper sm:text-6xl">
-          After the signal
-        </h2>
-        <div className="mt-20 grid gap-px border border-paper/10 bg-paper/10 sm:grid-cols-3">
-          {ITEMS.map((it) => (
-            <div
-              key={it.n}
-              className="group bg-ink p-9 transition-colors duration-500 hover:bg-surface"
-            >
-              <div className="flex items-baseline justify-between">
-                <span className="fig-label">{it.label}</span>
-                <span className="font-mono text-sm text-paper/25">
-                  {it.n}
-                </span>
-              </div>
-              <h3 className="mt-8 font-display text-2xl font-bold leading-[1.02] tracking-[-0.02em] text-paper">
-                {it.title}
-              </h3>
-              <p className="mt-5 font-mono text-sm leading-relaxed text-paper/50">
-                {it.desc}
-              </p>
+    <section id="roadmap" className="mx-auto max-w-6xl px-6 py-20">
+      <p className="sec-label">Roadmap</p>
+      <h2
+        className="mt-4 font-sans text-3xl font-bold uppercase tracking-[-0.02em] text-white sm:text-4xl"
+        style={{ fontFamily: "var(--font-anek)" }}
+      >
+        After the signal
+      </h2>
+
+      <div className="mt-10 grid gap-px border border-white/10 bg-white/10 sm:grid-cols-3">
+        {ITEMS.map((it) => (
+          <div
+            key={it.n}
+            className="bg-[#0B0B0E] p-6 transition-colors hover:bg-[#121216]"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[0.6875rem] tracking-[0.2em] text-white/40">
+                {it.label}
+              </span>
+              <span className="font-mono text-sm text-white/25">{it.n}</span>
             </div>
-          ))}
-        </div>
+            <h3
+              className="mt-6 font-sans text-lg font-semibold uppercase leading-tight tracking-[-0.01em] text-white"
+              style={{ fontFamily: "var(--font-anek)" }}
+            >
+              {it.title}
+            </h3>
+            <p className="mt-3 font-mono text-sm leading-relaxed text-white/50">
+              {it.desc}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
   );

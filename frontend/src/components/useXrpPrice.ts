@@ -2,13 +2,23 @@
 
 import { useEffect, useState } from "react";
 
-export default function FtsoTicker() {
+const RPC =
+  process.env.NEXT_PUBLIC_FLARE_RPC ||
+  "https://flare-api.flare.network/ext/C/rpc";
+const FTSOV2 =
+  process.env.NEXT_PUBLIC_FLARE_FTSOV2 ||
+  "0x7bde3df0624114edb3a67dfe6753e62f4e7c1d20";
+const DATA =
+  "0x93e9f806" +
+  "015852502f55534400000000000000000000000000" +
+  "0000000000000000000000";
+
+export default function useXrpPrice() {
   const [price, setPrice] = useState<number | null>(null);
   const [live, setLive] = useState(false);
 
   useEffect(() => {
     let mounted = true;
-
     const fetchPrice = async () => {
       try {
         const res = await fetch("/api/xrp", { cache: "no-store" });
@@ -23,7 +33,6 @@ export default function FtsoTicker() {
         if (mounted) setLive(false);
       }
     };
-
     fetchPrice();
     const iv = window.setInterval(fetchPrice, 20000);
     return () => {
@@ -32,19 +41,5 @@ export default function FtsoTicker() {
     };
   }, []);
 
-  return (
-    <div className="flex items-center gap-3 border-t border-paper/10 py-3">
-      <span className="dim-label">Live feed</span>
-      <span className="h-1.5 w-1.5 rounded-full bg-accent blink" />
-      <span className="font-mono text-xs tracking-[0.15em] text-paper/70">
-        XRP/USD{" "}
-        <span className="text-paper">
-          {price !== null ? price.toFixed(6) : "—"}
-        </span>
-      </span>
-      <span className="hidden font-mono text-[0.625rem] uppercase tracking-[0.2em] text-paper/30 sm:inline">
-        {live ? "read live from Flare FTSO v2" : "ftsov2 feed offline"}
-      </span>
-    </div>
-  );
+  return { price, live };
 }
