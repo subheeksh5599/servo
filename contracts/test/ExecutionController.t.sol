@@ -7,6 +7,7 @@ import {ExecutionController} from "../src/ExecutionController.sol";
 import {MockFlareDataConnector} from "./mocks/MockFlareDataConnector.sol";
 import {MockFlareContractRegistry} from "./mocks/MockFlareContractRegistry.sol";
 import {MockFtsoV2} from "./mocks/MockFtsoV2.sol";
+import {MockERC20} from "./mocks/MockERC20.sol";
 import {ProofBuilder} from "./mocks/ProofBuilder.sol";
 import {IXRPPayment} from "@flarenetwork/flare-periphery-contracts/flare/IXRPPayment.sol";
 
@@ -15,7 +16,9 @@ contract ExecutionControllerTest is Test {
     ExecutionController public controller;
     MockFlareDataConnector public fdc;
     MockFtsoV2 public ftsoV2;
+    MockERC20 public fxrp;
     address internal constant AGENT = address(0xBEEF);
+    address internal constant OWNER_EVM = address(0xCAFE);
     bytes32 internal constant OWNER = bytes32(uint256(0xaaaa));
 
     event ExecutionReceipt(
@@ -35,7 +38,8 @@ contract ExecutionControllerTest is Test {
         ftsoV2 = new MockFtsoV2();
         MockFlareContractRegistry reg = new MockFlareContractRegistry(address(fdc), address(ftsoV2));
         registry = new StandingOrderRegistry(address(reg));
-        controller = new ExecutionController(address(registry), 1_000_000_000_000, 7200);
+        fxrp = new MockERC20();
+        controller = new ExecutionController(address(registry), address(fxrp), 1_000_000_000_000, 7200);
         registry.setController(address(controller));
         controller.setOperator(AGENT);
         ftsoV2.setFeed(1_082_000, 6, uint64(block.timestamp)); // XRP/USD = 1.082
@@ -44,7 +48,7 @@ contract ExecutionControllerTest is Test {
     function _registerOrder(uint32 _cadence, uint64 _amount) internal returns (uint256) {
         registry.registerOrder(ProofBuilder.buildProof(
             _cadence, _amount, 0, 1, true, _amount, OWNER, 0, bytes32(uint256(1))
-        ));
+        ), OWNER_EVM);
         return registry.orderCount();
     }
 
@@ -94,7 +98,7 @@ contract ExecutionControllerTest is Test {
         uint256 id = registry.orderCount() + 1;
         registry.registerOrder(ProofBuilder.buildProof(
             3600, 1_000_000, 7, 1, true, 1_000_000, OWNER, 0, bytes32(uint256(2))
-        ));
+        ), OWNER_EVM);
         vm.warp(block.timestamp + 3601);
         vm.prank(AGENT);
         vm.expectRevert(ExecutionController.VenueAdapterUnset.selector);

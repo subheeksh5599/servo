@@ -29,7 +29,7 @@ contract StandingOrderRegistryTest is Test {
 
     function testRegisterOrderHappyPath() public {
         uint64 amount = 25_000_000_000; // 25 XRP in drops
-        registry.registerOrder(_proof(3600, amount));
+        registry.registerOrder(_proof(3600, amount), address(this));
         uint256 id = registry.orderCount();
         StandingOrderRegistry.StandingOrder memory o = registry.getOrder(id);
         assertEq(o.ownerXrpl, OWNER);
@@ -47,7 +47,7 @@ contract StandingOrderRegistryTest is Test {
         IXRPPayment.Proof memory p = ProofBuilder.buildProof(
             3600, 0, 0, 1, true, 50_000_000_000, OWNER, 0, bytes32(uint256(5))
         );
-        registry.registerOrder(p);
+        registry.registerOrder(p, address(this));
         uint256 id = registry.orderCount();
         StandingOrderRegistry.StandingOrder memory o = registry.getOrder(id);
         assertEq(o.amountDrops, 50_000_000_000);
@@ -56,7 +56,7 @@ contract StandingOrderRegistryTest is Test {
     function testRegisterOrderRevertsWhenProofNotVerified() public {
         fdc.setVerifyResult(false);
         vm.expectRevert(StandingOrderRegistry.NotVerified.selector);
-        registry.registerOrder(_proof(3600, 1_000_000));
+        registry.registerOrder(_proof(3600, 1_000_000), address(this));
     }
 
     function testRegisterOrderRevertsWhenPaymentFailed() public {
@@ -64,19 +64,19 @@ contract StandingOrderRegistryTest is Test {
             3600, 1_000_000, 0, 1, true, 1_000_000, OWNER, 1, bytes32(uint256(2))
         );
         vm.expectRevert(StandingOrderRegistry.PaymentFailed.selector);
-        registry.registerOrder(p);
+        registry.registerOrder(p, address(this));
     }
 
     function testRegisterOrderRevertsBadMagic() public {
         IXRPPayment.Proof memory p = _proof(3600, 1_000_000);
         p.data.responseBody.firstMemoData = abi.encodePacked(bytes2(0x4242), bytes18(0));
         vm.expectRevert(StandingOrderRegistry.BadMemoMagic.selector);
-        registry.registerOrder(p);
+        registry.registerOrder(p, address(this));
     }
 
     function testRegisterOrderRevertsZeroCadence() public {
         vm.expectRevert(StandingOrderRegistry.ZeroCadence.selector);
-        registry.registerOrder(_proof(0, 1_000_000));
+        registry.registerOrder(_proof(0, 1_000_000), address(this));
     }
 
     function testRegisterOrderRevertsUnknownVenue() public {
@@ -84,7 +84,7 @@ contract StandingOrderRegistryTest is Test {
             3600, 1_000_000, 99, 1, true, 1_000_000, OWNER, 0, bytes32(uint256(3))
         );
         vm.expectRevert(StandingOrderRegistry.UnknownVenue.selector);
-        registry.registerOrder(p);
+        registry.registerOrder(p, address(this));
     }
 
     function testRegisterVenueThenOrder() public {
@@ -92,12 +92,12 @@ contract StandingOrderRegistryTest is Test {
         IXRPPayment.Proof memory p = ProofBuilder.buildProof(
             3600, 1_000_000, 7, 1, true, 1_000_000, OWNER, 0, bytes32(uint256(4))
         );
-        registry.registerOrder(p);
+        registry.registerOrder(p, address(this));
         assertEq(registry.getOrder(1).venueId, 7);
     }
 
     function testCancelOrder() public {
-        registry.registerOrder(_proof(3600, 1_000_000));
+        registry.registerOrder(_proof(3600, 1_000_000), address(this));
         registry.cancelOrder(1);
         assertFalse(registry.getOrder(1).active);
         vm.expectRevert(StandingOrderRegistry.OrderInactive.selector);
@@ -105,7 +105,7 @@ contract StandingOrderRegistryTest is Test {
     }
 
     function testOnlyControllerCanCancel() public {
-        registry.registerOrder(_proof(3600, 1_000_000));
+        registry.registerOrder(_proof(3600, 1_000_000), address(this));
         vm.prank(address(0x1234));
         vm.expectRevert(StandingOrderRegistry.NotController.selector);
         registry.cancelOrder(1);

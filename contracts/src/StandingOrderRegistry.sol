@@ -31,6 +31,7 @@ contract StandingOrderRegistry {
     error OrderInactive();
     error NotController();
     error NotRegistered();
+    error ZeroOwnerEvm();
 
     event OrderRegistered(
         uint256 indexed orderId,
@@ -47,6 +48,7 @@ contract StandingOrderRegistry {
 
     struct StandingOrder {
         bytes32 ownerXrpl; // sourceAddressHash of the XRPL account
+        address ownerEvm; // Flare address holding the FXRP (funding source)
         uint64 amountDrops; // per-cycle amount in XRP drops
         uint32 cadenceSeconds; // seconds between executions
         uint8 venueId; // target yield venue
@@ -101,8 +103,12 @@ contract StandingOrderRegistry {
     }
 
     /// @notice Register a standing order from an attested XRPL payment.
-    /// @dev Verifies the FDC proof, decodes the memo, stores the order.
-    function registerOrder(IXRPPayment.Proof calldata _proof) external returns (uint256 orderId) {
+    /// @param _proof Attested XRPL payment (FDC-verified).
+    /// @param _ownerEvm Flare address that holds the FXRP funding this order.
+    function registerOrder(IXRPPayment.Proof calldata _proof, address _ownerEvm)
+        external returns (uint256 orderId)
+    {
+        if (_ownerEvm == address(0)) revert ZeroOwnerEvm();
         if (!IXRPPaymentVerification(flareDataConnector).verifyXRPPayment(_proof)) {
             revert NotVerified();
         }
@@ -116,6 +122,7 @@ contract StandingOrderRegistry {
         orderId = ++orderCount;
         StandingOrder storage o = orders[orderId];
         o.ownerXrpl = body.sourceAddressHash;
+        o.ownerEvm = _ownerEvm;
         o.amountDrops = amountDrops;
         o.cadenceSeconds = cadence;
         o.venueId = venueId;

@@ -3,6 +3,7 @@ pragma solidity ^0.8.24;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {StandingOrderRegistry} from "./StandingOrderRegistry.sol";
+import {IVenueAdapter} from "./adapters/IVenueAdapter.sol";
 import {IXRPPayment} from "@flarenetwork/flare-periphery-contracts/flare/IXRPPayment.sol";
 
 /// @notice FtsoV2's public interface marks getFeedById payable (fee path);
@@ -51,6 +52,8 @@ contract ExecutionController {
 
     StandingOrderRegistry public immutable registry;
     address public immutable ftsoV2;
+    /// @notice FXRP token (funding asset of every order).
+    IERC20 public immutable fxrp;
     bytes21 public constant XRP_USD_FEED =
         bytes21(hex"015852502f55534400000000000000000000000000");
     uint256 public constant PRICE_DECIMALS = 1e6;
@@ -67,9 +70,10 @@ contract ExecutionController {
         _;
     }
 
-    constructor(address _registry, uint256 _maxPerTickDrops, uint256 _priceMaxAgeSeconds) {
+    constructor(address _registry, address _fxrp, uint256 _maxPerTickDrops, uint256 _priceMaxAgeSeconds) {
         registry = StandingOrderRegistry(_registry);
         ftsoV2 = registry.ftsoV2();
+        fxrp = IERC20(_fxrp);
         maxPerTickDrops = _maxPerTickDrops;
         priceMaxAgeSeconds = _priceMaxAgeSeconds;
         operator = msg.sender;
@@ -97,6 +101,13 @@ contract ExecutionController {
         // Venue 0 = hold as FXRP (no external adapter required).
         VenueAdapter storage va = venueAdapters[o.venueId];
         if (o.venueId != 0 && !va.set) revert VenueAdapterUnset();
+
+        if (o.venueId != 0) {
+            // Pull FXRP from the order's funding address and route it into
+            // the venue vault via the adapter.
+            fxrp.transferFrom(o.ownerEvm, va.adapter, amount);
+            IVenueAdapter(va.adapter).deposit(fxrp, amount, o.ownerEvm);
+        }
 
         registry.markExecuted(_orderId, amount);
 
