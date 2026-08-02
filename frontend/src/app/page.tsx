@@ -1,7 +1,8 @@
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
-import Pipeline from "@/components/Pipeline";
+import Mechanism from "@/components/Mechanism";
+import PhotoBreak from "@/components/PhotoBreak";
 import Manifesto from "@/components/Manifesto";
 import Protocols from "@/components/Protocols";
 import Roadmap from "@/components/Roadmap";
@@ -13,8 +14,14 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        <Pipeline />
+        <Mechanism />
+        <PhotoBreak src="/coin.png" caption="The asset — now in motion" />
         <Manifesto />
+        <PhotoBreak
+          src="/network.png"
+          caption="The machine — every node verified"
+          align="right"
+        />
         <Protocols />
         <Roadmap />
       </main>

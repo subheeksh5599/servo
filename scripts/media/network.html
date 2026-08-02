@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin:0; padding:0; }
+  html,body { width:1440px; height:900px; overflow:hidden; background:#0A0A0B; }
+  body { font-family: ui-monospace, monospace; }
+  .blob { position:absolute; border-radius:50%; filter:blur(110px); }
+  .b1 { width:700px; height:520px; left:-120px; top:-80px; background:rgba(108,92,231,0.5); }
+  .b2 { width:640px; height:480px; right:-160px; bottom:-60px; background:rgba(77,124,254,0.4); }
+  .vig { position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 30%, rgba(10,10,11,0.94) 100%); }
+  .nodes { position:absolute; inset:0; }
+  .n { position:absolute; width:9px; height:9px; border-radius:50%; background:#EDEDE8; opacity:0.9; box-shadow:0 0 14px rgba(108,92,231,0.8); }
+  .link { position:absolute; height:1.5px; background:linear-gradient(90deg, rgba(108,92,231,0.7), rgba(237,237,232,0.25)); transform-origin:left center; }
+  .label { position:absolute; right:60px; bottom:46px; font-size:15px; letter-spacing:0.28em; text-transform:uppercase; color:rgba(237,237,232,0.7); }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="vig"></div>
+  <div class="nodes" id="nodes"></div>
+  <div class="label">The machine — every node verified</div>
+<script>
+  (function(){
+    var nodes = [];
+    var NS = 14;
+    var cx = 1440, cy = 900;
+    for (var i = 0; i < NS; i++) {
+      nodes.push({ x: Math.random() * cx, y: Math.random() * cy });
+    }
+    var box = document.getElementById("nodes");
+    var els = [];
+    nodes.forEach(function (p) {
+      var d = document.createElement("div");
+      d.className = "n";
+      d.style.left = (p.x - 4) + "px";
+      d.style.top = (p.y - 4) + "px";
+      box.appendChild(d);
+      els.push(d);
+    });
+    // connect near neighbours
+    for (var i = 0; i < NS; i++) {
+      for (var j = i + 1; j < NS; j++) {
+        var dx = nodes[i].x - nodes[j].x, dy = nodes[i].y - nodes[j].y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 360) {
+          var l = document.createElement("div");
+          l.className = "link";
+          var ang = Math.atan2(dy, dx) * 180 / Math.PI;
+          l.style.left = nodes[i].x + "px";
+          l.style.top = nodes[i].y + "px";
+          l.style.width = dist + "px";
+          l.style.transform = "rotate(" + ang + "deg)";
+          box.appendChild(l);
+        }
+      }
+    }
+  })();
+</script>
+</body>
+</html>

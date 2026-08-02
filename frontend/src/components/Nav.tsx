@@ -1,20 +1,24 @@
 "use client";
 
 import useXrpPrice from "@/hooks/useXrpPrice";
+import Logo from "@/components/Logo";
 import { Badge } from "@/components/ui/badge";
 
 export default function Nav() {
   const { price, live } = useXrpPrice();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur-xl">
+    <header className="fixed top-0 z-50 w-full border-b border-border/50 bg-background/60 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="font-display text-lg font-bold tracking-tight">
-          <span className="text-primary">_</span>servo
+        <a href="#top" className="flex items-center gap-2.5 text-foreground">
+          <Logo className="h-6 w-6 text-foreground" />
+          <span className="font-display text-lg font-bold tracking-tight">
+            servo
+          </span>
         </a>
         <nav className="hidden items-center gap-8 text-sm text-muted-foreground sm:flex">
-          <a href="#pipeline" className="transition-colors hover:text-foreground">
-            Pipeline
+          <a href="#mechanism" className="transition-colors hover:text-foreground">
+            Mechanism
           </a>
           <a href="#protocols" className="transition-colors hover:text-foreground">
             Why Flare

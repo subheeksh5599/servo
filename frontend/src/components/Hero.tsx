@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import Aurora from "@/components/Aurora";
 import useXrpPrice from "@/hooks/useXrpPrice";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,13 +21,13 @@ export default function Hero() {
           duration: 1.1,
           ease: "power4.out",
           stagger: 0.08,
-          delay: 0.15,
+          delay: 0.3,
         }
       );
       gsap.fromTo(
         ".hero-fade",
         { opacity: 0, y: 22 },
-        { opacity: 1, y: 0, duration: 0.9, ease: "power3.out", delay: 0.8, stagger: 0.1 }
+        { opacity: 1, y: 0, duration: 0.9, ease: "power3.out", delay: 0.9, stagger: 0.1 }
       );
     }, scope);
     return () => ctx.revert();
@@ -40,24 +39,37 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-screen flex-col justify-center overflow-hidden"
     >
-      <Aurora />
+      {/* cinematic video background */}
+      <video
+        className="absolute inset-0 h-full w-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        poster="/coin.png"
+      >
+        <source src="/hero.mp4" type="video/mp4" />
+      </video>
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_72%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_78%)]"
       />
+      <div aria-hidden className="absolute inset-0 bg-background/30" />
 
-      <div className="relative mx-auto w-full max-w-6xl px-6 py-32">
+      <div className="relative mx-auto w-full max-w-6xl px-6 py-36">
         <div className="hero-fade mb-8 flex items-center gap-3">
           <Badge variant="secondary" className="font-mono text-xs">
             Flare Summer Signal 2026
           </Badge>
           <Badge variant="live" className="font-mono text-xs">
             <span className={`live-dot ${live ? "" : "opacity-40"}`} />
-            {live ? `XRP/USD $${price !== null ? price.toFixed(4) : "—"}` : "feed offline"}
+            {live
+              ? `XRP/USD $${price !== null ? price.toFixed(4) : "—"}`
+              : "feed offline"}
           </Badge>
         </div>
 
-        <h1 className="font-display text-[clamp(3rem,9vw,8.5rem)] font-bold leading-[0.92] tracking-[-0.04em]">
+        <h1 className="max-w-4xl font-display text-[clamp(3rem,9vw,8.5rem)] font-bold leading-[0.92] tracking-[-0.04em]">
           <span className="block">
             <span className="w-mask"><span className="hero-word">Sign</span></span>{" "}
             <span className="w-mask"><span className="hero-word">once.</span></span>
@@ -79,7 +91,7 @@ export default function Hero() {
         </p>
 
         <div className="hero-fade mt-12 flex flex-wrap items-center gap-4">
-          <a href="#pipeline">
+          <a href="#mechanism">
             <Button size="lg">See it run</Button>
           </a>
           <a

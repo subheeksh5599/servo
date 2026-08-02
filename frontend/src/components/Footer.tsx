@@ -1,11 +1,16 @@
+import Logo from "@/components/Logo";
+
 export default function Footer() {
   return (
     <footer className="border-t border-border/60">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-display text-lg font-bold tracking-tight">
-            <span className="text-primary">_</span>servo
-          </p>
+          <a href="#top" className="flex items-center gap-2.5 text-foreground">
+            <Logo className="h-6 w-6 text-foreground" />
+            <span className="font-display text-lg font-bold tracking-tight">
+              servo
+            </span>
+          </a>
           <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground">
             <a
               href="https://github.com/subheeksh5599/servo"

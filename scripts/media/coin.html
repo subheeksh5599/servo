@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  * { margin:0; padding:0; }
+  html,body { width:1440px; height:900px; overflow:hidden; background:#0A0A0B; }
+  body { font-family: ui-monospace, monospace; }
+  .blob { position:absolute; border-radius:50%; filter:blur(100px); }
+  .b1 { width:760px; height:560px; left:-160px; top:-120px; background:rgba(108,92,231,0.55); }
+  .b2 { width:700px; height:520px; right:-200px; top:40px; background:rgba(77,124,254,0.45); }
+  .b3 { width:600px; height:460px; left:35%; top:50%; background:rgba(229,85,199,0.32); }
+  .vig { position:absolute; inset:0; background:radial-gradient(ellipse at center, transparent 35%, rgba(10,10,11,0.95) 100%); }
+  .coin { position:absolute; left:50%; top:50%; width:340px; height:340px; margin:-170px 0 0 -170px; }
+  .core { position:absolute; inset:0; border-radius:50%; border:2px solid rgba(237,237,232,0.9); display:flex; align-items:center; justify-content:center; font-size:54px; letter-spacing:0.16em; color:#EDEDE8; background:radial-gradient(circle at 34% 30%, rgba(108,92,231,0.4), rgba(10,10,11,0.25) 70%); box-shadow:0 0 110px rgba(108,92,231,0.4), inset 0 0 60px rgba(108,92,231,0.18); }
+  .r { position:absolute; inset:-30px; border-radius:50%; border:2px solid rgba(108,92,231,0.55); }
+  .r2 { inset:-80px; border:1.5px solid rgba(108,92,231,0.32); }
+  .r3 { inset:-140px; border:1px solid rgba(108,92,231,0.18); }
+  .label { position:absolute; left:60px; bottom:46px; font-size:15px; letter-spacing:0.28em; text-transform:uppercase; color:rgba(237,237,232,0.7); }
+</style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+  <div class="vig"></div>
+  <div class="coin">
+    <div class="r r1"></div>
+    <div class="r r2"></div>
+    <div class="r r3"></div>
+    <div class="core">XRP</div>
+  </div>
+  <div class="label">The asset — now in motion</div>
+</body>
+</html>
