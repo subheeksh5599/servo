@@ -105,7 +105,7 @@ export default function Sidebar({
         <button className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 font-body text-[13px] text-mist transition-colors hover:bg-white/5">
           <Zap size={15} /> FTSO v2
           <span className="ml-auto font-mono text-[11px] text-mist/80">
-            {live && price !== null ? `$${price.toFixed(4)}` : "—"}
+            {live && price !== null ? `$${price.toFixed(4)}` : ""}
           </span>
         </button>
         <button onClick={() => onView("settings")} className="flex w-full items-center gap-2.5 rounded-md px-2 py-1.5 font-body text-[13px] text-mist transition-colors hover:bg-white/5">

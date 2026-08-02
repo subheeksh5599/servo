@@ -60,7 +60,7 @@ export default function Dashboard() {
       ownerInitials: rec.ownerEvm ? rec.ownerEvm.slice(2, 4).toUpperCase() : "",
       nextAt: rec.nextExecutionAt
         ? new Date(Number(rec.nextExecutionAt) * 1000).toISOString().slice(5, 16).replace("T", " ")
-        : "—",
+        : "",
       status: "paused",
     };
   });

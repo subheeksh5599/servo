@@ -39,13 +39,13 @@ export default function GroupedList({
       {!data.deployed && (
         <EmptyState
           title="Registry not configured"
-          body="Deploy the contracts on Coston2 (forge script script/Deploy.s.sol), then set SERVO_REGISTRY / SERVO_CONTROLLER. Orders you create with one XRPL signature will appear here — from real attestations, nothing mocked."
+          body="Deploy the contracts on Coston2 (forge script script/Deploy.s.sol), then set SERVO_REGISTRY / SERVO_CONTROLLER. Orders you create with one XRPL signature will appear here · from real attestations, nothing mocked."
         />
       )}
       {data.deployed && orders.length === 0 && (
         <EmptyState
           title="No standing orders yet"
-          body="Send an XRPL payment with a Servo memo — the watcher attests it via FDC and this list fills with real orders."
+          body="Send an XRPL payment with a Servo memo · the watcher attests it via FDC and this list fills with real orders."
         />
       )}
       {data.deployed && orders.length > 0 && groups.length === 0 && (

@@ -19,11 +19,10 @@ export default function Architecture() {
     offset: ["start 0.75", "end 0.45"],
   });
 
-  // center node: expands + rotates while exploding
+  // center node: expands while exploding (kept upright, no rotation)
   const centerScale = useTransform(scrollYProgress, [0, 0.35], [1, 1.5]);
-  const centerRot = useTransform(scrollYProgress, [0, 0.35], [0, 90]);
 
-  // per-node travel: explode out, then lock (stable hook count — 6 nodes)
+  // per-node travel: explode out, then lock (stable hook count · 6 nodes)
   const nodeX = NODES.map((_, i) =>
     useTransform(scrollYProgress, [0.15, 0.55, 0.85], [0, NODES[i].x, NODES[i].x])
   );
@@ -50,7 +49,7 @@ export default function Architecture() {
           <div className="absolute inset-0 flex items-center justify-center">
             {/* center node */}
             <motion.div
-              style={{ scale: centerScale, rotate: centerRot, zIndex: 10 }}
+              style={{ scale: centerScale, zIndex: 10 }}
               className="display flex h-44 w-44 items-center justify-center rounded-full border-2 border-butter bg-charcoal text-center text-base text-butter shadow-[0_0_60px_-10px_#ffe17c66]"
             >
               STANDING
@@ -83,7 +82,7 @@ export default function Architecture() {
           </div>
 
           <p className="absolute bottom-0 left-0 right-0 text-center font-mono text-xs uppercase tracking-widest text-sage/40">
-            scroll — the order explodes into the Flare stack, then locks
+            scroll to assemble
           </p>
         </div>
       </div>

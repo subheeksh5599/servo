@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 // Reads the deployed Servo registry on Coston2 via raw JSON-RPC (no client
 // dependency). If SERVO_REGISTRY / SERVO_CONTROLLER are not set, honestly
-// reports deployed:false — the dashboard shows real empty states.
+// reports deployed:false · the dashboard shows real empty states.
 const REGISTRY = process.env.SERVO_REGISTRY || "";
 const CONTROLLER = process.env.SERVO_CONTROLLER || "";
 const RPC = process.env.COSTON2_RPC || "https://coston2-api.flare.network/ext/C/rpc";
@@ -51,7 +51,7 @@ export async function GET() {
       orders: [],
       venues: [],
       receipts: [],
-      note: "SERVO_REGISTRY not configured — read-only view. Deploy (forge script script/Deploy.s.sol), then set SERVO_REGISTRY / SERVO_CONTROLLER to go live.",
+      note: "SERVO_REGISTRY not configured · read-only view. Deploy (forge script script/Deploy.s.sol), then set SERVO_REGISTRY / SERVO_CONTROLLER to go live.",
     });
   }
   try {
@@ -107,7 +107,7 @@ export async function GET() {
       }
     }
 
-    // receipts — ExecutionReceipt events from the controller
+    // receipts · ExecutionReceipt events from the controller
     const logsRes = await fetch(RPC, {
       method: "POST",
       headers: { "content-type": "application/json" },

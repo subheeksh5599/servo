@@ -39,11 +39,10 @@ export default function Nav() {
           <a href="#features" className="transition-colors hover:text-charcoal">Features</a>
           <a href="#how" className="transition-colors hover:text-charcoal">How it works</a>
           <a href="#architecture" className="transition-colors hover:text-charcoal">Architecture</a>
-          <a href="/dashboard" className="transition-colors hover:text-charcoal">Dashboard</a>
         </nav>
         <div className="flex items-center gap-4">
           <span className="hidden font-body text-sm font-medium text-charcoal/60 sm:block">
-            {live ? `XRP/USD $${price?.toFixed(4)}` : "XRP/USD —"}
+            {live ? `XRP/USD $${price?.toFixed(4)}` : "XRP/USD"}
           </span>
           <a href="/dashboard" className="rounded-full bg-charcoal px-6 py-2 font-body text-sm font-medium text-paper transition-transform hover:scale-105">
             Open console

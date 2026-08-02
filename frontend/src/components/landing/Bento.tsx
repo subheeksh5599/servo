@@ -12,7 +12,7 @@ export default function Bento() {
         </h2>
 
         <div className="mt-16 grid auto-rows-[400px] grid-cols-1 gap-4 md:grid-cols-3">
-          {/* 1 — spans 2 */}
+          {/* 1 · spans 2 */}
           <div className="micro group relative col-span-1 overflow-hidden rounded-xl border border-charcoal/10 bg-[#f8f9fa] p-8 md:col-span-2">
             <div className="flex h-full flex-col justify-between">
               <div>
@@ -20,8 +20,8 @@ export default function Bento() {
                 <h3 className="display mt-6 text-3xl text-charcoal">One signature</h3>
                 <p className="mt-3 max-w-md font-body text-charcoal/60">
                   A normal XRP payment with a Servo memo is your standing
-                  order. The instruction rides inline — cadence, amount,
-                  venue, strategy — and the Flare Data Connector proves it
+                  order. The instruction rides inline · cadence, amount,
+                  venue, strategy · and the Flare Data Connector proves it
                   on-chain before anything moves.
                 </p>
               </div>
@@ -49,7 +49,7 @@ export default function Bento() {
                 <h3 className="display mt-6 text-3xl text-paper">FXRP mint</h3>
                 <p className="mt-3 font-body text-sage">
                   Incoming XRP becomes FXRP through FAssets v1.3 direct
-                  minting — a payment you already know how to make becomes a
+                  minting · a payment you already know how to make becomes a
                   yield position.
                 </p>
               </div>
@@ -97,7 +97,7 @@ export default function Bento() {
                 <h3 className="display mt-6 text-3xl text-charcoal">FDC truth</h3>
                 <p className="mt-3 font-body text-charcoal/60">
                   Every XRPL payment is verified against the Flare Data
-                  Connector on-chain. No bridge, no trusted relayer — the
+                  Connector on-chain. No bridge, no trusted relayer · the
                   payment IS the instruction.
                 </p>
               </div>
@@ -114,7 +114,7 @@ export default function Bento() {
                 <LineChart className="h-8 w-8 text-charcoal" />
                 <h3 className="display mt-6 text-3xl text-charcoal">FTSO pricing</h3>
                 <p className="mt-3 font-body text-charcoal/60">
-                  Every execution is priced by Flare's enshrined oracle —
+                  Every execution is priced by Flare's enshrined oracle ·
                   stale feeds block execution. No external price sources.
                 </p>
               </div>
@@ -137,7 +137,7 @@ export default function Bento() {
                 <ReceiptText className="h-8 w-8 text-butter" />
                 <h3 className="display mt-6 text-3xl text-paper">Receipts</h3>
                 <p className="mt-3 font-body text-sage">
-                  Amount, price, route, timestamp — every execution is a
+                  Amount, price, route, timestamp · every execution is a
                   verifiable on-chain event. Prove any of it, any time.
                 </p>
               </div>

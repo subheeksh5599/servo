@@ -2,13 +2,13 @@ import { X, Check } from "lucide-react";
 
 const OLD = [
   "Your XRP sits in a wallet earning nothing",
-  "Yield is spread across 8+ pools — nobody watches it for you",
+  "Yield is spread across 8+ pools · nobody watches it for you",
   "DCA means manual buys on a schedule you keep yourself",
   "Every move needs a signature, a bridge, and your attention",
 ];
 
 const NEW = [
-  "One XRPL payment sets the order — the machine does the rest",
+  "One XRPL payment sets the order · the machine does the rest",
   "FDC proves your payment on-chain; FAssets mints it into FXRP",
   "A strategy agent re-routes to the best realized yield automatically",
   "Every execution leaves a verifiable on-chain receipt",

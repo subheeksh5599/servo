@@ -6,12 +6,12 @@ const STEPS = [
   {
     n: "01",
     title: "Pay once",
-    desc: "Send XRP to the Servo address with a memo — cadence, amount, venue, strategy packed into the payment itself. The Flare Data Connector certifies it on-chain.",
+    desc: "Send XRP to the Servo address with a memo · cadence, amount, venue, strategy packed into the payment itself. The Flare Data Connector certifies it on-chain.",
   },
   {
     n: "02",
     title: "The machine mints",
-    desc: "Incoming XRP becomes FXRP through FAssets v1.3 direct minting. No agent selection, no bridge step — a payment you already know how to make.",
+    desc: "Incoming XRP becomes FXRP through FAssets v1.3 direct minting. No agent selection, no bridge step · a payment you already know how to make.",
   },
   {
     n: "03",

@@ -161,7 +161,7 @@ export default function Wallet() {
             <span className="text-butter">Your cards.</span>
           </h2>
           <p className="mt-6 max-w-md font-body text-lg leading-relaxed text-sage">
-            Each Servo card is a live standing order — one signature created
+            Each Servo card is a live standing order · one signature created
             it, and the machine runs it forever. Hover to fan them out. Click
             one to focus it.
           </p>
@@ -169,7 +169,7 @@ export default function Wallet() {
             <span className="live-dot" />
             XRP/USD{" "}
             <span className="text-butter">
-              {live && price !== null ? `$${price.toFixed(6)}` : "—"}
+              {live && price !== null ? `$${price.toFixed(6)}` : ""}
             </span>
             <span className="text-sage/40">live from FTSO v2</span>
           </p>

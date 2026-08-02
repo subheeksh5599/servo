@@ -1,6 +1,5 @@
-# Servo — Sign once. Your XRP works forever.
+# Servo · Sign once. Your XRP works forever.
 
-**Flare Summer Signal 2026 · Bounty 1 — Interoperable Asset Products**
 
 Servo is recurring money for XRP, built on Flare. One XRPL transaction turns
 your wallet into a standing order: Flare Data Connector proves incoming XRP
@@ -11,35 +10,35 @@ One when the agent asks. Nothing else, ever.
 
 ## Target user
 
-XRP holders who want their XRP working in DeFi without managing positions —
+XRP holders who want their XRP working in DeFi without managing positions ·
 DCA buyers, subscription/autopay users, and anyone leaving XRP idle in a
 wallet. Flare's own research: 2B+ XRP sits dormant in Xaman; FXRP yield is
 fragmented across 8+ venues and nobody watches it for you.
 
 ## Why Flare (the meaningful integration)
 
-Servo is built on four enshrined Flare protocols — this is not a thin
+Servo is built on four enshrined Flare protocols · this is not a thin
 wrapper:
 
 | Protocol | Role in Servo |
 |---|---|
-| **FDC** | Every XRPL payment is proven on-chain via `verifyXRPPayment` against the FlareDataConnector before anything executes. No bridge, no trusted relayer claims — the payment IS the instruction. |
+| **FDC** | Every XRPL payment is proven on-chain via `verifyXRPPayment` against the FlareDataConnector before anything executes. No bridge, no trusted relayer claims · the payment IS the instruction. |
 | **FAssets v1.3** | Direct minting turns a normal XRP send into FXRP (`AssetManager.executeDirectMinting`), so the standing order can fund itself from the XRPL side. |
 | **FTSO v2** | `getFeedById(XRP/USD)` prices every execution on-chain; stale feeds block execution. |
 | **FSA (pattern)** | One-signature instruction semantics (Servo's memo layout mirrors the FSA 0xFF memo-field instruction: the full instruction rides inline in the XRPL payment memo). |
 
 ## What was built
 
-- **`contracts/`** — `StandingOrderRegistry` (FDC proof intake, Servo memo
+- **`contracts/`** · `StandingOrderRegistry` (FDC proof intake, Servo memo
   decode, order lifecycle) + `ExecutionController` (FTSO-priced execution,
   per-tick caps, circuit breaker, venue adapters, mint leg, on-chain
   receipts). 24 Foundry tests, all green.
-- **`watcher/`** — XRPL payment watcher → FDC attestation → on-chain
+- **`watcher/`** · XRPL payment watcher → FDC attestation → on-chain
   registration.
-- **`agent/`** — realized-yield indexer (7/30-day APY from real adapter
+- **`agent/`** · realized-yield indexer (7/30-day APY from real adapter
   exchange rates) + strategy agent (confidence-scored auto-routing,
   human-in-the-loop below 70% confidence).
-- **`scripts/`** — memo encoder + standing-order payment sender.
+- **`scripts/`** · memo encoder + standing-order payment sender.
 
 ### Deployed (Coston2 fork, real protocol addresses)
 

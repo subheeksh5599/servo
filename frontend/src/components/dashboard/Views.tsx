@@ -11,7 +11,7 @@ export function VenuesView({ data }: { data: ServoData }) {
       </p>
       {!data.deployed && (
         <p className="mt-8 font-body text-[13px] text-mist">
-          Not deployed yet — venues appear here after <span className="font-mono">forge script script/Deploy.s.sol</span>.
+          Not deployed yet · venues appear here after <span className="font-mono">forge script script/Deploy.s.sol</span>.
         </p>
       )}
       {data.deployed && rows.length === 0 && (
@@ -39,7 +39,7 @@ export function ReceiptsView({ data }: { data: ServoData }) {
   return (
     <div className="p-6">
       <p className="font-body text-[13px] text-mist">
-        ExecutionReceipt events from the controller — amount, price, route,
+        ExecutionReceipt events from the controller · amount, price, route,
         timestamp, tx hash.
       </p>
       {rows.length === 0 && (
@@ -80,7 +80,7 @@ export function AgentView({ data }: { data: ServoData }) {
         </p>
       )}
       <div className="mt-6 rounded-lg border border-white/7 bg-pane p-4 font-mono text-[12px] leading-relaxed text-mist">
-        <p className="text-sage/60"># agent — no decisions logged yet</p>
+        <p className="text-sage/60"># agent · no decisions logged yet</p>
         <p>threshold: 70% · tick: 60s · venues scored: {data.venues.length}</p>
         <p>orders watched: {data.orders.length}</p>
       </div>

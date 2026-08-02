@@ -4,7 +4,6 @@ import ProblemSolution from "@/components/landing/ProblemSolution";
 import Bento from "@/components/landing/Bento";
 import Wallet from "@/components/landing/Wallet";
 import HowItWorks from "@/components/landing/HowItWorks";
-import ReceiptsList from "@/components/landing/ReceiptsList";
 import Architecture from "@/components/landing/Architecture";
 import FinalCta from "@/components/landing/FinalCta";
 import Footer from "@/components/landing/Footer";
@@ -21,7 +20,6 @@ export default function Page() {
         <Bento />
         <Wallet />
         <HowItWorks />
-        <ReceiptsList />
         <Architecture />
         <FinalCta />
       </main>

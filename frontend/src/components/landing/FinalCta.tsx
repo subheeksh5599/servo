@@ -15,27 +15,14 @@ export default function FinalCta() {
         </h2>
         <p className="mt-8 max-w-2xl font-body text-2xl leading-relaxed text-charcoal/70">
           One signature. One machine. Receipts forever. Built on Flare's
-          enshrined protocols — non-custodial, FDC-verified, FTSO-priced.
+          enshrined protocols · non-custodial, FDC-verified, FTSO-priced.
         </p>
-        <form
-          onSubmit={(e) => e.preventDefault()}
-          className="mt-12 flex w-full max-w-xl flex-col gap-4 sm:flex-row"
+        <a
+          href="/dashboard"
+          className="display mt-12 inline-block rounded-lg bg-charcoal px-10 py-4 text-2xl text-butter shadow-xl transition-transform hover:scale-105"
         >
-          <input
-            type="email"
-            placeholder="you@xrp.dev"
-            className="h-14 flex-1 rounded-lg border-2 border-charcoal bg-paper px-6 font-body text-charcoal outline-none focus:border-charcoal"
-          />
-          <button
-            type="submit"
-            className="display h-14 rounded-lg bg-charcoal px-8 text-xl text-butter shadow-xl transition-transform hover:scale-105"
-          >
-            Join waitlist
-          </button>
-        </form>
-        <p className="mt-8 font-mono text-xs uppercase tracking-widest text-charcoal/50">
-          Flare Summer Signal 2026 · Bounty 1
-        </p>
+          Open console
+        </a>
       </div>
     </section>
   );

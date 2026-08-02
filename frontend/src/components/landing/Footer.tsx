@@ -12,11 +12,8 @@ export default function Footer() {
           <a href="https://dev.flare.network/" target="_blank" rel="noopener noreferrer" className="hover:text-charcoal">
             Flare Dev Hub
           </a>
-          <a href="/dashboard" className="hover:text-charcoal">
-            Dashboard
-          </a>
           <span className="font-mono text-xs text-charcoal/40">
-            FSA · FAssets v1.3 · FDC · FTSO v2 — non-custodial
+            FSA · FAssets v1.3 · FDC · FTSO v2 · non-custodial
           </span>
         </div>
       </div>
