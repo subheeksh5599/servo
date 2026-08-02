@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  @apply bg-ink text-paper font-mono antialiased;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #c10f45;
+  color: #edede8;
+}
+
+/* Fig label */
+.fig-label {
+  @apply font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-paper/40;
+}
+
+.fig-label::before {
+  content: "";
+  @apply inline-block w-8 h-px align-middle mr-3 bg-accent;
+}
+
+/* Reveal base (JS adds .is-visible) */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Marquee */
+.marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee__inner {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: marqueeScroll 32s linear infinite;
+  will-change: transform;
+}
+
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
