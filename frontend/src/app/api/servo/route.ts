@@ -9,13 +9,12 @@ const REGISTRY = process.env.SERVO_REGISTRY || "";
 const CONTROLLER = process.env.SERVO_CONTROLLER || "";
 const RPC = process.env.COSTON2_RPC || "https://coston2-api.flare.network/ext/C/rpc";
 
-// selectors
-const ORDER_COUNT = "0x85b2d9ce"; // orderCount()
-const GET_ORDER =
-  "0x3a69c05a"; // getOrder(uint256)
-const VENUE_ADAPTERS = "0x6c1fe72d"; // venueAdapters(uint8)
-const EXCHANGE_RATE = "0xe6aa216c"; // exchangeRate()
-const VENUE_NAME = "0xae7725a4"; // venueName()
+// selectors (verified via cast sig on the deployed contracts)
+const ORDER_COUNT = "0x2453ffa8"; // orderCount()
+const GET_ORDER = "0xd09ef241"; // getOrder(uint256)
+const VENUE_ADAPTERS = "0xbab098b9"; // venueAdapters(uint8)
+const EXCHANGE_RATE = "0x3ba0b9a9"; // exchangeRate()
+const VENUE_NAME = "0xf722ba5a"; // venueName()
 const EXECUTION_RECEIPT =
   "0x2a2e8ba6e0fdcab07ebd6a8b8f1d17e7f8a9b3c5d4e6f708192a3b4c5d6e7f80"; // topic0 placeholder
 
@@ -32,6 +31,11 @@ async function rpc(method: string, params: unknown[]) {
 
 function encUint(v: number | bigint) {
   return "0x" + BigInt(v).toString(16).padStart(64, "0");
+}
+
+// selector + ABI arg (encUint already carries its own 0x prefix)
+function selArg(selector: string, v: number | bigint) {
+  return selector + encUint(v).slice(2);
 }
 
 function call(to: string, data: string) {
@@ -60,7 +64,7 @@ export async function GET() {
     const count = Number(BigInt(countHex));
     const orders = [];
     for (let i = 1; i <= count; i++) {
-      const raw = await call(REGISTRY, GET_ORDER + encUint(i));
+      const raw = await call(REGISTRY, selArg(GET_ORDER, i));
       const h = raw.slice(2);
       // struct: ownerXrpl(32) ownerEvm(32) amountDrops(32) cadenceSeconds(32)
       // venueId(32) strategyId(32) autoExecute(32) active(32) nextExecutionAt(32)
@@ -91,23 +95,28 @@ export async function GET() {
     const venues = [];
     for (let v = 0; v <= 4; v++) {
       try {
-        const raw = await call(CONTROLLER, VENUE_ADAPTERS + encUint(v));
+        const raw = await call(CONTROLLER, selArg(VENUE_ADAPTERS, v));
         const h = raw.slice(2);
         const adapter = "0x" + h.slice(24, 64);
         const set = Number(BigInt("0x" + h.slice(64, 128))) === 1;
         if (!set || adapter === "0x" + "0".repeat(40)) continue;
         const rateHex = await call(adapter, EXCHANGE_RATE);
         const nameHex = await call(adapter, VENUE_NAME);
-        const name = Buffer.from(nameHex.slice(2), "hex")
-          .toString("utf8")
-          .replace(/\u0000/g, "");
+        // proper ABI string decode: offset word + length word + data
+        const nh = nameHex.slice(2);
+        const nameLen = Number(BigInt("0x" + nh.slice(64, 128)));
+        const name = Buffer.from(nh.slice(128, 128 + nameLen * 2), "hex").toString("utf8");
         venues.push({ venueId: v, adapter, name, rate: BigInt(rateHex).toString() });
       } catch {
         /* venue not configured */
       }
     }
 
-    // receipts · ExecutionReceipt events from the controller
+    // receipts — ExecutionReceipt events from the controller (the public
+    // Coston2 RPC caps eth_getLogs at 30 blocks, so use a 30-block window)
+    const latestHex = await rpc("eth_blockNumber", []);
+    const latest = Number(BigInt(latestHex));
+    const fromBlock = Math.max(0, latest - 30);
     const logsRes = await fetch(RPC, {
       method: "POST",
       headers: { "content-type": "application/json" },
@@ -115,7 +124,7 @@ export async function GET() {
         jsonrpc: "2.0",
         id: 1,
         method: "eth_getLogs",
-        params: [{ address: CONTROLLER, fromBlock: "0x0", toBlock: "latest" }],
+        params: [{ address: CONTROLLER, fromBlock: "0x" + fromBlock.toString(16), toBlock: "latest" }],
       }),
     });
     const logsJson = await logsRes.json();

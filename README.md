@@ -65,14 +65,14 @@ wrapper:
   human-in-the-loop below 70% confidence).
 - **`scripts/`** · memo encoder + standing-order payment sender.
 
-### Deployed (Coston2 fork, real protocol addresses)
+### Deployed (Coston2, live 2026-08-02)
 
 | Contract | Address |
 |---|---|
-| StandingOrderRegistry | `0xE97166C46816d48B2aFFCfFf704B962E88fd0abE` |
-| ExecutionController | `0xC5123B98c3A0aa1a4F9390BCf76f7B9D775a5687` |
-| stXRP adapter (venue 1) | `0x1f871a3fe5956F642CfF1671eEe7a886E4986a2d` |
-| earnXRP adapter (venue 2) | `0xA68a91FCf064aE09f06D198503EDa896d0F04459` |
+| StandingOrderRegistry | `0x3B40edd04B3275868b6362Da1FC706D069379BE6` |
+| ExecutionController | `0x1F4592d16215387308928512B2404a9b6541b0d9` |
+| stXRP adapter (venue 1) | `0xD054bC0216A52bBe24D69818493b997a5aaCE7df` |
+| earnXRP adapter (venue 2) | `0x1f505140c5733ceD8BaC30093dDDfDE1c628ddE1` |
 
 Addresses verified on-chain: FDC `0x1000…0001`, FtsoV2, FXRP
 `0x0b6A…`, TESTstXRP `0x4066…` / TESTearnXRP `0xF97B…` vaults. Full table in
