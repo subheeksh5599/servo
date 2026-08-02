@@ -16,14 +16,22 @@ const env = process.env;
 const STATE_FILE = path.join(__dirname, "state", "prices.json");
 const SECONDS_PER_DAY = 86400;
 
-const CHAIN = defineChain({
-  id: Number(env.SERVO_CHAIN_ID || 114),
-  name: "Coston2",
-  network: "coston2",
-  nativeCurrency: { name: "Coston2 FLR", symbol: "C2FLR", decimals: 18 },
-  rpcUrls: { default: { http: [env.COSTON2_RPC] } },
-});
-const publicClient = createPublicClient({ chain: CHAIN, transport: http(env.COSTON2_RPC) });
+// lazy client: constructed on first use so importing this module (e.g. from
+// the agent) never crashes on missing env at load time
+let publicClient = null;
+function client() {
+  if (!publicClient) {
+    const CHAIN = defineChain({
+      id: Number(env.SERVO_CHAIN_ID || 114),
+      name: "Coston2",
+      network: "coston2",
+      nativeCurrency: { name: "Coston2 FLR", symbol: "C2FLR", decimals: 18 },
+      rpcUrls: { default: { http: [env.COSTON2_RPC] } },
+    });
+    publicClient = createPublicClient({ chain: CHAIN, transport: http(env.COSTON2_RPC) });
+  }
+  return publicClient;
+}
 
 const ABI = parseAbi([
   "function getOrder(uint256) view returns ((bytes32 ownerXrpl,address ownerEvm,uint64 amountDrops,uint32 cadenceSeconds,uint8 venueId,uint8 strategyId,bool autoExecute,bool active,uint64 nextExecutionAt,uint64 lastExecutedAt,uint64 totalExecutedDrops,uint32 executionCount))",
@@ -61,14 +69,14 @@ async function collect() {
   const venues = [];
   for (let v = 0; v <= 4; v++) {
     try {
-      const [adapter, set] = await publicClient.readContract({
+      const [adapter, set] = await client().readContract({
         address: controller, abi: ABI, functionName: "venueAdapters", args: [v],
       });
       if (!set) continue;
-      const rate = await publicClient.readContract({
+      const rate = await client().readContract({
         address: adapter, abi: ABI, functionName: "exchangeRate",
       });
-      const name = await publicClient.readContract({
+      const name = await client().readContract({
         address: adapter, abi: ABI, functionName: "venueName",
       });
       venues.push({ venueId: v, adapter, name, rate: rate.toString() });

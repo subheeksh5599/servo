@@ -8,6 +8,31 @@ the FXRP to the venue with the best realized yield (priced by FTSO v2), and
 every execution leaves a verifiable on-chain receipt. One signature at setup.
 One when the agent asks. Nothing else, ever.
 
+## Architecture
+
+```mermaid
+flowchart LR
+    U[User wallet] -->|1 · XRPL payment + Servo memo| XRPL[(XRPL testnet)]
+    XRPL -->|2 · watch payments| W[watcher]
+    W -->|3 · attestation request| VER[FDC verifier]
+    VER -->|4 · proof ~90s| W
+    W -->|5 · registerOrder proof| R[StandingOrderRegistry]
+    R -->|6 · order active| AG[Strategy agent]
+    AG -->|7 · tick, score venues| CT[ExecutionController]
+    FTSO[FTSO v2 XRP/USD] -->|8 · live price| CT
+    CT -->|9 · route FXRP| AD[Venue adapter]
+    AD -->|10 · deposit| V[(Yield vault)]
+    CT -->|11 · mint leg| FA[FAssets v1.3]
+    FA -->|mints FXRP| V
+    CT -->|12 · ExecutionReceipt| R
+    R -->|13 · read orders| D[Dashboard]
+    D -->|live price| FTSO
+```
+
+Non-custodial end to end: the user's XRP/FXRP stays in their own wallet; the
+agent can only propose; the only trust anchors are Flare's enshrined FDC +
+FTSO v2.
+
 ## Target user
 
 XRP holders who want their XRP working in DeFi without managing positions ·

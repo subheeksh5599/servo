@@ -16,6 +16,13 @@ const env = process.env;
 const THRESHOLD = Number(env.AGENT_CONFIDENCE_THRESHOLD || 70);
 const TICK_MS = Number(env.AGENT_TICK_MS || 60_000);
 
+if (!env.SERVO_REGISTRY || !env.SERVO_CONTROLLER || !env.RELAYER_PK || !env.COSTON2_RPC) {
+  console.error(
+    "missing env: SERVO_REGISTRY, SERVO_CONTROLLER, RELAYER_PK, COSTON2_RPC (see ../.env.example)"
+  );
+  process.exit(1);
+}
+
 const CHAIN = defineChain({
   id: Number(env.SERVO_CHAIN_ID || 114),
   name: "Coston2",

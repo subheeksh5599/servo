@@ -8,7 +8,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Client, dropsToXrp } from "xrpl";
-import { createWalletClient, createPublicClient, http, parseAbi } from "viem";
+import { createWalletClient, createPublicClient, http as httpTransport, parseAbi } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { defineChain } from "viem";
 import { FdcClient } from "./fdc-client.mjs";
@@ -40,8 +40,8 @@ const COSTON2 = defineChain({
   rpcUrls: { default: { http: [env.COSTON2_RPC] } },
 });
 const relayer = privateKeyToAccount(env.RELAYER_PK);
-const publicClient = createPublicClient({ chain: COSTON2, transport: http(env.COSTON2_RPC) });
-const wallet = createWalletClient({ account: relayer, chain: COSTON2, transport: http(env.COSTON2_RPC) });
+const publicClient = createPublicClient({ chain: COSTON2, transport: httpTransport(env.COSTON2_RPC) });
+const wallet = createWalletClient({ account: relayer, chain: COSTON2, transport: httpTransport(env.COSTON2_RPC) });
 
 const REGISTRY_ABI = parseAbi([
   "function registerOrder((bytes32[] merkleProof,(bytes32 attestationType,bytes32 sourceId,uint64 votingRound,uint64 lowestUsedTimestamp,(bytes32 transactionId,address proofOwner) requestBody,(uint64 blockNumber,uint64 blockTimestamp,string sourceAddress,bytes32 sourceAddressHash,bytes32 receivingAddressHash,bytes32 intendedReceivingAddressHash,int256 spentAmount,int256 intendedSpentAmount,int256 receivedAmount,int256 intendedReceivedAmount,bool hasMemoData,bytes firstMemoData,bool hasDestinationTag,uint256 destinationTag,uint8 status) responseBody) data,bytes32 salt) proof,address ownerEvm) returns (uint256 orderId)",
