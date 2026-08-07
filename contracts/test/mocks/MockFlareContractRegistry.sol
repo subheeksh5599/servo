@@ -13,7 +13,8 @@ contract MockFlareContractRegistry {
 
     function getContractAddressByName(string calldata _name) external view returns (address) {
         bytes32 n = keccak256(bytes(_name));
-        if (n == keccak256(bytes("FlareDataConnector"))) return fdc;
+        if (n == keccak256(bytes("FdcVerification")) || n == keccak256(bytes("FlareDataConnector")))
+        return fdc;
         if (n == keccak256(bytes("FtsoV2"))) return ftsoV2;
         return address(0);
     }

@@ -88,7 +88,7 @@ contract StandingOrderRegistry {
             _flareContractRegistry = 0xaD67FE66660Fb8dFE9d6b1b4240d8650e30F6019;
         }
         IFlareContractRegistry reg = IFlareContractRegistry(_flareContractRegistry);
-        flareDataConnector = reg.getContractAddressByName("FlareDataConnector");
+        flareDataConnector = reg.getContractAddressByName("FdcVerification");
         ftsoV2 = reg.getContractAddressByName("FtsoV2");
         controller = msg.sender;
 
