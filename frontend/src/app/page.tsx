@@ -1,10 +1,9 @@
 import Nav from "@/components/landing/Nav";
 import Hero from "@/components/landing/Hero";
-import ProblemSolution from "@/components/landing/ProblemSolution";
-import Bento from "@/components/landing/Bento";
-import Wallet from "@/components/landing/Wallet";
-import HowItWorks from "@/components/landing/HowItWorks";
-import Architecture from "@/components/landing/Architecture";
+import TheLeak from "@/components/landing/TheLeak";
+import WhatsHidden from "@/components/landing/WhatsHidden";
+import HowItMoves from "@/components/landing/HowItMoves";
+import Verify from "@/components/landing/Verify";
 import FinalCta from "@/components/landing/FinalCta";
 import Footer from "@/components/landing/Footer";
 
@@ -16,11 +15,10 @@ export default function Page() {
       <Nav />
       <main>
         <Hero />
-        <ProblemSolution />
-        <Bento />
-        <Wallet />
-        <HowItWorks />
-        <Architecture />
+        <TheLeak />
+        <WhatsHidden />
+        <HowItMoves />
+        <Verify />
         <FinalCta />
       </main>
       <Footer />

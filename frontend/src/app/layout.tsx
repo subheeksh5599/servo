@@ -1,20 +1,33 @@
 import type { Metadata } from "next";
-import { Anton, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 
-const anton = Anton({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-anton",
+/**
+ * Gambarino carries the display line: narrow, sharp-wedged, inscriptional.
+ * One weight, used with conviction.
+ */
+const gambarino = localFont({
+  variable: "--font-gambarino",
   display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
+  src: [{ path: "./fonts/Gambarino-Regular.woff2", weight: "400", style: "normal" }],
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+/**
+ * Sentient runs everything else: body copy, labels, navigation, buttons.
+ * Setting the body in a text serif makes the page read as a document about
+ * how the money actually works, not as a product landing page.
+ */
+const sentient = localFont({
+  variable: "--font-sentient",
   display: "swap",
+  fallback: ["Georgia", "Times New Roman", "serif"],
+  src: [
+    { path: "./fonts/Sentient-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/Sentient-Italic.woff2", weight: "400", style: "italic" },
+    { path: "./fonts/Sentient-Medium.woff2", weight: "500", style: "normal" },
+  ],
 });
 
 export const metadata: Metadata = {
@@ -29,7 +42,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${anton.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${gambarino.variable} ${sentient.variable}`} suppressHydrationWarning>
       <body>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
           {children}

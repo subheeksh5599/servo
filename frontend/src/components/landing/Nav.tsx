@@ -1,52 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
+
+const LINKS = [
+  { href: "#leak", label: "The leak" },
+  { href: "#hidden", label: "What is hidden" },
+  { href: "#moves", label: "How it moves" },
+  { href: "#verify", label: "Verify" },
+];
 
 export default function Nav() {
-  const [price, setPrice] = useState<number | null>(null);
-  const [live, setLive] = useState(false);
-
-  useEffect(() => {
-    let m = true;
-    const fetchPrice = async () => {
-      try {
-        const res = await fetch("/api/xrp", { cache: "no-store" });
-        const j = await res.json();
-        if (m && j?.ok) {
-          setPrice(j.price);
-          setLive(true);
-        }
-      } catch {
-        /* offline */
-      }
-    };
-    fetchPrice();
-    const iv = setInterval(fetchPrice, 20000);
-    return () => {
-      m = false;
-      clearInterval(iv);
-    };
-  }, []);
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 h-20 border-b border-charcoal/10 bg-paper/90 backdrop-blur">
-      <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
-        <a href="#top" className="display text-3xl text-charcoal">
-          servo<span className="text-butter">.</span>
-        </a>
-        <nav className="hidden items-center gap-8 font-body text-sm font-medium text-charcoal/70 md:flex">
-          <a href="#problem" className="transition-colors hover:text-charcoal">Why</a>
-          <a href="#features" className="transition-colors hover:text-charcoal">Features</a>
-          <a href="#how" className="transition-colors hover:text-charcoal">How it works</a>
-          <a href="#architecture" className="transition-colors hover:text-charcoal">Architecture</a>
+    <header className="sticky top-0 z-40 border-b hairline bg-[#edf0ee]/85 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+        <Link href="/" className="font-display text-xl tracking-tight">
+          Servo
+        </Link>
+        <nav className="hidden items-center gap-7 md:flex" aria-label="Page sections">
+          {LINKS.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className="text-[15px] text-[rgba(12,33,40,0.72)] transition-colors hover:text-[#0c2128]"
+            >
+              {l.label}
+            </a>
+          ))}
         </nav>
-        <div className="flex items-center gap-4">
-          <span className="hidden font-body text-sm font-medium text-charcoal/60 sm:block">
-            {live ? `XRP/USD $${price?.toFixed(4)}` : "XRP/USD"}
-          </span>
-          <a href="/dashboard" className="rounded-full bg-charcoal px-6 py-2 font-body text-sm font-medium text-paper transition-transform hover:scale-105">
-            Open console
+        <div className="flex items-center gap-3">
+          <a
+            href="https://github.com/subheeksh5599/servo"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden text-[15px] text-[rgba(12,33,40,0.72)] transition-colors hover:text-[#0c2128] sm:block"
+          >
+            GitHub
           </a>
+          <Link
+            href="/dashboard"
+            className="btn-pill btn-pill-solid px-4 py-1.5 text-[15px]"
+          >
+            Open dashboard
+          </Link>
         </div>
       </div>
     </header>

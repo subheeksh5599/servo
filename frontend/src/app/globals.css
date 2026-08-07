@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap");
-
 @import "tw-animate-css";
 
 @import "shadcn/tailwind.css";
@@ -13,68 +11,55 @@
 }
 
 html {
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
 }
 
 ::selection {
-  background: #ffe17c;
-  color: #171e19;
+  background: #0c2128;
+  color: #edf0ee;
 }
 
-/* ---------- display type ---------- */
+/* ---------- editorial type ---------- */
 
 .display {
-  @apply font-display uppercase tracking-normal;
-  line-height: 0.9;
+  font-family: var(--font-gambarino), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
 }
 
-/* ---------- yellow highlight bar behind words ---------- */
+/* ---------- hairline ---------- */
 
-.hl {
-  position: relative;
-  display: inline-block;
-  z-index: 0;
+.hairline {
+  border-color: rgba(12, 33, 40, 0.14);
 }
 
-.hl::before {
-  content: "";
-  position: absolute;
-  left: -4%;
-  right: -2%;
-  top: 52%;
-  bottom: 4%;
-  background: #ffe17c;
-  transform: rotate(-1.5deg);
-  z-index: -1;
-}
+/* ---------- pill buttons ---------- */
 
-/* ---------- grid backgrounds ---------- */
-
-.bg-grid-light {
-  background-image:
-    linear-gradient(to right, #b7c6c220 1px, transparent 1px),
-    linear-gradient(to bottom, #b7c6c220 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.bg-grid-dark {
-  background-image:
-    linear-gradient(to right, #b7c6c21a 1px, transparent 1px),
-    linear-gradient(to bottom, #b7c6c21a 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-/* ---------- card micro-interaction ---------- */
-
-.micro {
+.btn-pill {
+  border-radius: 9999px;
+  border: 1px solid rgba(12, 33, 40, 0.22);
   transition:
-    transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.micro:hover {
-  transform: translateY(-4px);
+.btn-pill:hover {
+  transform: translateY(-1px);
+}
+
+.btn-pill-solid {
+  background: #0c2128;
+  color: #edf0ee;
+}
+
+.btn-pill-solid:hover {
+  background: #16343e;
+}
+
+.btn-pill-ghost:hover {
+  background: rgba(12, 33, 40, 0.06);
 }
 
 /* ---------- marquee ---------- */
@@ -89,7 +74,7 @@ html {
 }
 
 .marquee-track {
-  animation: marquee 30s linear infinite;
+  animation: marquee 36s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -98,45 +83,78 @@ html {
   }
 }
 
+/* ---------- terminal ---------- */
+
+.terminal {
+  background: #0c2128;
+  color: #d8e0dc;
+  border-radius: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.terminal .t-cmd {
+  color: #a9c2b4;
+}
+
+.terminal .t-out {
+  color: #edf0ee;
+}
+
+.terminal .t-comment {
+  color: #6d8377;
+}
+
+/* ---------- section meta ---------- */
+
+.sec-label {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(12, 33, 40, 0.55);
+}
+
 @layer base {
   .theme {
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans);
   }
   :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
+    --background: oklch(0.951 0.008 160);
+    --foreground: oklch(0.22 0.03 210);
+    --card: oklch(0.972 0.005 160);
+    --card-foreground: oklch(0.22 0.03 210);
+    --popover: oklch(0.972 0.005 160);
+    --popover-foreground: oklch(0.22 0.03 210);
+    --primary: oklch(0.22 0.03 210);
+    --primary-foreground: oklch(0.951 0.008 160);
+    --secondary: oklch(0.93 0.012 160);
+    --secondary-foreground: oklch(0.22 0.03 210);
+    --muted: oklch(0.93 0.012 160);
+    --muted-foreground: oklch(0.45 0.02 210);
+    --accent: oklch(0.93 0.012 160);
+    --accent-foreground: oklch(0.22 0.03 210);
     --destructive: oklch(0.577 0.245 27.325);
     --destructive-foreground: oklch(0.985 0 0);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+    --border: oklch(0.85 0.015 170);
+    --input: oklch(0.85 0.015 170);
+    --ring: oklch(0.6 0.03 200);
+    --chart-1: oklch(0.5 0.05 200);
+    --chart-2: oklch(0.6 0.05 150);
+    --chart-3: oklch(0.45 0.04 90);
+    --chart-4: oklch(0.55 0.05 250);
+    --chart-5: oklch(0.45 0.05 30);
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar: oklch(0.972 0.005 160);
+    --sidebar-foreground: oklch(0.22 0.03 210);
+    --sidebar-primary: oklch(0.22 0.03 210);
+    --sidebar-primary-foreground: oklch(0.951 0.008 160);
+    --sidebar-accent: oklch(0.93 0.012 160);
+    --sidebar-accent-foreground: oklch(0.22 0.03 210);
+    --sidebar-border: oklch(0.85 0.015 170);
+    --sidebar-ring: oklch(0.6 0.03 200);
   }
   .dark {
     --background: oklch(0.145 0 0);
@@ -180,6 +198,6 @@ html {
     @apply bg-background text-foreground font-body antialiased;
   }
   html {
-    @apply font-sans;
+    @apply font-body;
   }
 }

@@ -69,8 +69,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ["var(--font-anton)", "Impact", "sans-serif"],
-        body: ["var(--font-satoshi)", "var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-gambarino)", "Georgia", "Times New Roman", "serif"],
+        body: ["var(--font-sentient)", "Georgia", "Times New Roman", "serif"],
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       backgroundImage: {

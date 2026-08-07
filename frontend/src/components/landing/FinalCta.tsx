@@ -1,29 +1,39 @@
 "use client";
 
+import Link from "next/link";
+import { motion } from "framer-motion";
+
 export default function FinalCta() {
   return (
-    <section className="relative overflow-hidden bg-butter px-6 py-32 text-charcoal">
-      {/* decorative giant text overlays */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 select-none">
-        <span className="display absolute -top-4 left-4 text-[16vw] leading-none text-charcoal/10">SIGN</span>
-        <span className="display absolute bottom-0 right-4 text-[16vw] leading-none text-charcoal/10">ONCE</span>
-      </div>
-
-      <div className="relative mx-auto flex max-w-3xl flex-col items-center text-center">
-        <h2 className="display text-6xl leading-[0.9] text-charcoal md:text-8xl">
-          Your XRP should work while you sleep.
+    <section className="mx-auto max-w-6xl px-5 py-28 text-center md:py-36">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <h2 className="display mx-auto max-w-3xl text-[clamp(2.4rem,5.5vw,4.2rem)] text-[#0c2128]">
+          Sign once. Your XRP works forever.
         </h2>
-        <p className="mt-8 max-w-2xl font-body text-2xl leading-relaxed text-charcoal/70">
-          One signature. One machine. Receipts forever. Built on Flare's
-          enshrined protocols · non-custodial, FDC-verified, FTSO-priced.
+        <p className="mx-auto mt-6 max-w-xl text-[17px] leading-relaxed text-[rgba(12,33,40,0.72)]">
+          One XRPL payment, a verifiable proof, and the schedule runs itself
+          within caps, behind a circuit breaker, with an agent that only
+          proposes.
         </p>
-        <a
-          href="/dashboard"
-          className="display mt-12 inline-block rounded-lg bg-charcoal px-10 py-4 text-2xl text-butter shadow-xl transition-transform hover:scale-105"
-        >
-          Open console
-        </a>
-      </div>
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Link href="/dashboard" className="btn-pill btn-pill-solid w-full px-8 py-3.5 text-[16px] sm:w-auto">
+            Open dashboard
+          </Link>
+          <a
+            href="https://github.com/subheeksh5599/servo"
+            target="_blank"
+            rel="noreferrer"
+            className="btn-pill btn-pill-ghost w-full px-8 py-3.5 text-[16px] sm:w-auto"
+          >
+            Read the code
+          </a>
+        </div>
+      </motion.div>
     </section>
   );
 }
