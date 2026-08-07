@@ -4,7 +4,8 @@
 export class FdcClient {
   constructor({ verifierUrl, verifierKey, daUrl, sourceId }) {
     this.verifierUrl = verifierUrl;
-    this.verifierKey = verifierKey || "0".repeat(64);
+    // Flare-hosted verifier key (UUID format, per dev docs)
+    this.verifierKey = verifierKey || "00000000-0000-0000-0000-000000000000";
     this.daUrl = daUrl;
     this.sourceId = this.#pad32(sourceId);
   }
@@ -31,14 +32,16 @@ export class FdcClient {
     return res.json();
   }
 
-  /** Request an XRPPayment attestation for an XRPL transaction. Returns {requestId, status}. */
-  async prepareXrpPayment(txHashHex) {
+  /** Request an XRPPayment attestation for an XRPL transaction.
+   *  proofOwner: EVM address authorized to verify the proof on-chain
+   *  (must be the contract that calls verifyXRPPayment). */
+  async prepareXrpPayment(txHashHex, proofOwner) {
     // rippled hashes come bare (no 0x); the verifier expects 0x-prefixed bytes32
     const transactionId = txHashHex.startsWith("0x") ? txHashHex : `0x${txHashHex}`;
-    return this.#post("/verifier/prepareRequest", {
+    return this.#post("/verifier/xrp/XRPPayment/prepareRequest", {
       attestationType: this.#pad32(FdcClient.ATTESTATION.xrpPayment),
       sourceId: this.sourceId,
-      requestBody: { transactionId },
+      requestBody: { transactionId, proofOwner },
     });
   }
 
@@ -47,7 +50,7 @@ export class FdcClient {
     const deadline = Date.now() + timeoutMs;
     let last = null;
     while (Date.now() < deadline) {
-      const res = await this.#post("/verifier/waitForFinalizedRequest", {
+      const res = await this.#post("/verifier/xrp/XRPPayment/waitForFinalizedRequest", {
         attestationType,
         sourceId: this.sourceId,
         requestId,

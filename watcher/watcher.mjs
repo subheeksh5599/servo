@@ -87,7 +87,7 @@ async function attestAndRegister(tx) {
   state.lastPaymentAt = Date.now();
   flushState();
 
-  const prepared = await fdc.prepareXrpPayment(txHash);
+  const prepared = await fdc.prepareXrpPayment(txHash, REGISTRY);
   console.log(`[watcher] attestation requested: requestId=${prepared.requestId} status=${prepared.status}`);
   if (prepared.status !== "OK") throw new Error(`prepare failed: ${prepared.status}`);
 
