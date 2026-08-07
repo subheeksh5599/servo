@@ -5,7 +5,7 @@
 > **Hackathon:** Flare Summer Signal 2026 · **Bounty:** 1 — Interoperable Asset Products
 > **Deadline:** Aug 14, 2026 · **Docs:** https://dev.flare.network/
 
-## BUILD STATUS (final, 2026-08-02)
+## BUILD STATUS (final, 2026-08-07)
 
 - [x] Phase 0 — repo, Foundry, env, LICENSE, README, addresses docs; agent/watcher scaffolds (Node ESM, deps pinned); tooling installed
 - [x] Phase 1 — FSA/FAssets/FDC/FTSO research; all addresses verified on-chain (docs/addresses.md); minting state verified LIVE on Coston2 (mintingPaused=false, granularity 1 UBA, 6 decimals); yield venues = real FSA vaults (Firelight/Kinetic docs JS-walled → on-chain vault probing instead)
@@ -13,16 +13,24 @@
 - [x] Phase 3 — watcher: XRPL stream → FDC XRPPayment attestation → registerOrder; replay-protected state, /health endpoint, graceful shutdown; smoke-tested against fork + real XRPL testnet WSS (boot → connect → orderCount read → health → SIGTERM clean)
 - [x] Phase 4 — indexer: 7/30d realized APY from real adapter exchange rates; proven against fork (TESTearnXRP rate 1.001100009020019019)
 - [x] Phase 5 — agent: venue scoring, confidence (freshness+count), auto-execute ≥70%, one-signature ask below; smoke-tested against fork (ticks clean; missing-env guard exits with clear message)
-- [x] Phase 6 — frontend: brutalist-lite landing + shadcn/ui dashboard (light/dark), live FTSO price, honest empty states; deployed at servo-cyan.vercel.app; dashboard → landing link; no mock data
+- [x] Phase 6 — frontend: brutalist-lite landing + shadcn/ui dashboard (light/dark), live FTSO price, honest empty states; deployed at servo-cyan.vercel.app (legacy) + new production deployment (2026-08-07); dashboard → landing link; no mock data
 - [x] Phase 7 (code) — real XRPL testnet payment broadcast (tx E715FA55…, tesSUCCESS, Servo memo); full contract flow exercised on Coston2 fork; watcher/agent integration smoke test green
 - [x] Phase 8 — edge cases in tests (caps, breaker, stale price, inactive, unverified proof); forge fmt clean; fresh-clone test green (forge build+test, all scripts boot, frontend builds); git grep secret sweep clean; no mock data anywhere
 - [x] Phase 9 (docs) — README (what/why/mermaid architecture/addresses/roadmap/honest status), docs/addresses.md, docs/ARCHITECTURE.md, docs/TRUST_MODEL.md, SUBMISSION_DRAFT.md (local-only)
 - [ ] Phase 10 — stretch: DEFERRED per the phase's own condition ("only if ahead of schedule"); core E2E unlock (below) comes first. Not a scope cut — the checklist itself gates it.
 
+## LIVE-ON-CHAIN VERIFICATION (2026-08-07)
+
+- [x] Coston2 registry name fix: `getContractAddressByName("FlareDataConnector")` returns zero on Coston2; v1.3 name is `FdcVerification` → `0x906507E0B64bcD494Db73bd0459d1C667e14B933` (verified on-chain, committed 9faf1f5)
+- [x] Real XRPL testnet payment attested: tx `E715FA55…`, votingRound 1413872, proof.json committed (public data)
+- [x] Proof verified ON-CHAIN against deployed FdcVerification: `verifyXRPPayment → true` (2026-08-07, via `register-order.mjs --dry`)
+- [ ] **REDEPLOY NEEDED (user action):** registry `0x3B40…BE6` was deployed with pre-fix code (resolves FDC → zero, registerOrder reverts). Command: `cd contracts && forge script script/Deploy.s.sol --rpc-url https://coston2-api.flare.network/ext/C/rpc --private-key $RELAYER_PK --broadcast` → paste NEW addresses into the Vercel envs → re-attest a fresh payment (proofOwner must be the NEW registry; the old proof is bound to the old address)
+- [ ] Registration of the attested order (after redeploy): `cd scripts && PROOF=proof.json SERVO_REGISTRY=<new> OWNER_EVM=<relayer> RELAYER_PK=$RELAYER_PK COSTON2_RPC=https://coston2-api.flare.network/ext/C/rpc node register-order.mjs`
+
 ## HUMAN ACTIONS (blocked from this environment — one click each, listed in order)
 
 1. [ ] Coston2 faucet (reCAPTCHA requires a human browser): https://faucet.flare.network/coston2 → address `0x4ccafDF7c8aFa0C7a8FE8ABACB1Cf726f82A5509` (relayer, key in .env) — 100 C2FLR + 10 FXRP per 24h
-2. [ ] Deploy: `forge script script/Deploy.s.sol --rpc-url https://coston2-api.flare.network/ext/C/rpc --private-key <relayer> --broadcast` → paste addresses into Vercel envs `SERVO_REGISTRY` + `SERVO_CONTROLLER` → dashboard goes live with real data
+2. [ ] Redeploy contracts with the FdcVerification fix (deploy done 2026-08-02 was pre-fix): `cd contracts && forge script script/Deploy.s.sol --rpc-url https://coston2-api.flare.network/ext/C/rpc --private-key <relayer> --broadcast` → paste NEW `SERVO_REGISTRY` + `SERVO_CONTROLLER` into the Vercel envs → dashboard goes live with real data (exact command also in LIVE-ON-CHAIN VERIFICATION above)
 3. [ ] Run watcher (`watcher/`) + agent (`agent/`) on an always-on host (VPS 187.127.137.136 or cron); if the FDC verifier WAF persists, run from that host (different egress)
 4. [ ] Record demo video (wf-recorder, docs/DEMO_SCRIPT.md) + submit on DoraHacks before Aug 14
 
@@ -160,7 +168,7 @@
 - [x] Contracts exercised end-to-end on Coston2 fork (deploy → register path via tests → execute → receipt)
 - [x] Watcher + agent integration smoke test (boot, connect, health, tick)
 - [x] Fallback demo path designed: orders work on existing FXRP balance (minting = bonus leg) — mitigates FAssets mint caps
-- [~] Live Coston2 loop: payment → attestation → order → mint → deposit → route-switch — (user) after faucet + deploy + verifier-accessible host (see HUMAN ACTIONS)
+- [~] Live Coston2 loop: payment → attestation → **on-chain proof verified (true, 2026-08-07)** → order registration → mint → deposit — registration onward needs the registry redeploy (see LIVE-ON-CHAIN VERIFICATION)
 - [~] Demo video (2 min, wf-recorder) — (user), docs/DEMO_SCRIPT.md
 - [~] Mainnet read-only demo — optional, after Coston2
 
