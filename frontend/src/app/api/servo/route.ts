@@ -65,28 +65,32 @@ export async function GET() {
     const orders = [];
     for (let i = 1; i <= count; i++) {
       const raw = await call(REGISTRY, selArg(GET_ORDER, i));
+      // A 0x or short return means the RPC rate-limited or the call reverted —
+      // break honestly rather than crash on an empty blob.
+      if (!raw || raw === "0x" || raw.length < 2 + 12 * 64) break;
       const h = raw.slice(2);
+      // The public getter returns the struct fields FLAT, one word each (no
+      // tuple offset word — verified against the deployed contract). The
+      // address is the rightmost 20 bytes of its word.
       // struct: ownerXrpl(32) ownerEvm(32) amountDrops(32) cadenceSeconds(32)
       // venueId(32) strategyId(32) autoExecute(32) active(32) nextExecutionAt(32)
       // lastExecutedAt(32) totalExecutedDrops(32) executionCount(32)
       const s = (off: number, bytes: number) =>
         "0x" + h.slice(off * 64, off * 64 + bytes * 2);
       const slot = (i: number) => Number(BigInt("0x" + h.slice(i * 64, i * 64 + 64)));
-      const active = slot(7) === 1;
-      const nextExecutionAt = slot(8);
       orders.push({
         id: i,
         ownerXrpl: s(0, 32),
-        ownerEvm: "0x" + h.slice(32, 72),
-        amountDrops: BigInt("0x" + h.slice(64, 128)).toString(),
+        ownerEvm: "0x" + h.slice(88, 128),
+        amountDrops: BigInt("0x" + h.slice(128, 192)).toString(),
         cadenceSeconds: slot(3),
         venueId: slot(4),
         strategyId: slot(5),
         autoExecute: slot(6) === 1,
-        active,
-        nextExecutionAt,
+        active: slot(7) === 1,
+        nextExecutionAt: slot(8),
         lastExecutedAt: slot(9),
-        totalExecutedDrops: BigInt("0x" + h.slice(320, 384)).toString(),
+        totalExecutedDrops: BigInt("0x" + h.slice(640, 704)).toString(),
         executionCount: slot(11),
       });
     }

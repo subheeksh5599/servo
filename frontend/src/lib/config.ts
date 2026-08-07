@@ -11,9 +11,9 @@
  */
 
 const REGISTRY =
-  process.env.NEXT_PUBLIC_REGISTRY_ADDRESS ?? "0x3B40edd04B3275868b6362Da1FC706D069379BE6";
+  process.env.NEXT_PUBLIC_REGISTRY_ADDRESS ?? "0x23504cb325032023ef207c2915F6CAee41b215Ac";
 const CONTROLLER =
-  process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS ?? "0x1F4592d16215387308928512B2404a9b6541b0d9";
+  process.env.NEXT_PUBLIC_CONTROLLER_ADDRESS ?? "0xD1f069BBEf328FA71dd1101646D4fDE68173c497";
 const FDC = process.env.NEXT_PUBLIC_FDC_ADDRESS ?? "0x906507E0B64bcD494Db73bd0459d1C667e14B933";
 const EXPLORER =
   process.env.NEXT_PUBLIC_EXPLORER_BASE ?? "https://coston2-explorer.flare.network/address";
@@ -168,8 +168,8 @@ export const verifyConfig = {
   checks: [
     {
       label: "The registry is live, and empty states are honest",
-      command: 'cast call 0x3B40edd0… "orderCount()"',
-      output: "0\n\n# orders appear as payments are attested and registered",
+      command: 'cast call 0x23504cb3… "orderCount()"',
+      output: "1\n\n# one order, created by the attested demo payment",
     },
     {
       label: "FTSO v2, read at execution time",
@@ -178,7 +178,7 @@ export const verifyConfig = {
     },
     {
       label: "Venue exchange rates from the deployed adapters",
-      command: 'cast call 0x1F4592d1… "venueAdapter(1)"',
+      command: 'cast call 0xD1f069BB… "venueAdapter(1)"',
       output: "TESTstXRP    1.0\nTESTearnXRP  1.001100009020019019\n\n# realized APY is computed from these, never invented",
     },
     {
