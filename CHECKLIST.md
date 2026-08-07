@@ -19,19 +19,22 @@
 - [x] Phase 9 (docs) — README (what/why/mermaid architecture/addresses/roadmap/honest status), docs/addresses.md, docs/ARCHITECTURE.md, docs/TRUST_MODEL.md, SUBMISSION_DRAFT.md (local-only)
 - [ ] Phase 10 — stretch: DEFERRED per the phase's own condition ("only if ahead of schedule"); core E2E unlock (below) comes first. Not a scope cut — the checklist itself gates it.
 
-## LIVE-ON-CHAIN VERIFICATION (2026-08-07)
+## LIVE-ON-CHAIN VERIFICATION (2026-08-07, final)
 
 - [x] Coston2 registry name fix: `getContractAddressByName("FlareDataConnector")` returns zero on Coston2; v1.3 name is `FdcVerification` → `0x906507E0B64bcD494Db73bd0459d1C667e14B933` (verified on-chain, committed 9faf1f5)
-- [x] Real XRPL testnet payment attested: tx `E715FA55…`, votingRound 1413872, proof.json committed (public data)
-- [x] Proof verified ON-CHAIN against deployed FdcVerification: `verifyXRPPayment → true` (2026-08-07, via `register-order.mjs --dry`)
-- [ ] **REDEPLOY NEEDED (user action):** registry `0x3B40…BE6` was deployed with pre-fix code (resolves FDC → zero, registerOrder reverts). Command: `cd contracts && forge script script/Deploy.s.sol --rpc-url https://coston2-api.flare.network/ext/C/rpc --private-key $RELAYER_PK --broadcast` → paste NEW addresses into the Vercel envs → re-attest a fresh payment (proofOwner must be the NEW registry; the old proof is bound to the old address)
-- [ ] Registration of the attested order (after redeploy): `cd scripts && PROOF=proof.json SERVO_REGISTRY=<new> OWNER_EVM=<relayer> RELAYER_PK=$RELAYER_PK COSTON2_RPC=https://coston2-api.flare.network/ext/C/rpc node register-order.mjs`
+- [x] **Fixed contracts deployed LIVE** (2026-08-02, confirmed on-chain 2026-08-07): registry `0x23504cb325032023ef207c2915F6CAee41b215Ac` resolves FDC → `0x9065…B933`; controller `0xD1f069BBEf328FA71dd1101646D4fDE68173c497`; both adapter venues wired (verified via /api/servo). The 0x3B40… deployment is superseded.
+- [x] Real XRPL testnet payment attested: tx `E715FA55…`; first proof (round 1413872) bound to the old registry; **re-attested for the live registry, round 1418677** (`attest.mjs` full flow: prepareRequest → requestAttestation on FdcHub tx `0x61f63dc6…` → relay round → DA proof)
+- [x] Fresh proof verified ON-CHAIN against deployed FdcVerification: `verifyXRPPayment → true` (2026-08-07, via `register-order.mjs --dry`)
+- [x] **STANDING ORDER REGISTERED LIVE**: `registerOrder` tx `0x0ea52d6337d67130b62777ed5d8e58a6184de2ec462ebf11fa460f2d22cefc7b` — `orderCount = 1`, order id 1 (1h cadence, venue 1, autoExecute), readable via the dashboard /api/servo
+- [x] Vercel envs updated to the live addresses (SERVO_REGISTRY + SERVO_CONTROLLER) — dashboard shows the real order
+- [x] Gas snapshot committed (`.gas-snapshot`, 23 entries)
+- [ ] Verify contracts on the Coston2 explorer — (user, browser flow): flattened source ready at `forge flatten src/StandingOrderRegistry.sol` (solc 0.8.28, via_ir, optimizer 200, cancun); blockscout API rejected the attempts with "optimization is required" (API quirk, UI works)
 
 ## HUMAN ACTIONS (blocked from this environment — one click each, listed in order)
 
-1. [ ] Coston2 faucet (reCAPTCHA requires a human browser): https://faucet.flare.network/coston2 → address `0x4ccafDF7c8aFa0C7a8FE8ABACB1Cf726f82A5509` (relayer, key in .env) — 100 C2FLR + 10 FXRP per 24h
-2. [ ] Redeploy contracts with the FdcVerification fix (deploy done 2026-08-02 was pre-fix): `cd contracts && forge script script/Deploy.s.sol --rpc-url https://coston2-api.flare.network/ext/C/rpc --private-key <relayer> --broadcast` → paste NEW `SERVO_REGISTRY` + `SERVO_CONTROLLER` into the Vercel envs → dashboard goes live with real data (exact command also in LIVE-ON-CHAIN VERIFICATION above)
-3. [ ] Run watcher (`watcher/`) + agent (`agent/`) on an always-on host (VPS 187.127.137.136 or cron); if the FDC verifier WAF persists, run from that host (different egress)
+1. [x] Coston2 faucet — done 2026-08-02: 100 C2FLR sent to relayer `0x4ccafDF7c8aFa0C7a8FE8ABACB1Cf726f82A5509` (funds the requestAttestation + registerOrder fees)
+2. [x] Deploy contracts — done twice (2026-08-02): first (0x3B40…) pre-fix, then the FdcVerification-fixed deploy (0x23504c…) that is live now
+3. [ ] Run watcher (`watcher/`) + agent (`agent/`) on an always-on host — VPS 187.127.137.136 was unreachable 2026-08-07 (100% packet loss, gateway dead); needs the host back up or a cron/systemd equivalent; the executor tick for order 1 waits on this
 4. [ ] Record demo video (wf-recorder, docs/DEMO_SCRIPT.md) + submit on DoraHacks before Aug 14
 
 ---
@@ -112,7 +115,7 @@
 - [x] Unit: venue adapter deposit routing + rate reads
 - [x] Fork test on Coston2: real FTSO v2 + FXRP + vaults via anvil fork (deploy + reads + agent/watcher integration)
 - [x] All tests pass: `forge test` — 24/24
-- [~] Gas report `forge snapshot` — sanity-checked via deployment gas logs; formal snapshot optional
+- [x] Gas report `forge snapshot` — committed (.gas-snapshot, 23 entries)
 
 ### 2.4 Deploy
 - [x] Deploy script: `forge script script/Deploy.s.sol` (Coston2 + fork; mainnet-ready via env)
@@ -168,7 +171,7 @@
 - [x] Contracts exercised end-to-end on Coston2 fork (deploy → register path via tests → execute → receipt)
 - [x] Watcher + agent integration smoke test (boot, connect, health, tick)
 - [x] Fallback demo path designed: orders work on existing FXRP balance (minting = bonus leg) — mitigates FAssets mint caps
-- [~] Live Coston2 loop: payment → attestation → **on-chain proof verified (true, 2026-08-07)** → order registration → mint → deposit — registration onward needs the registry redeploy (see LIVE-ON-CHAIN VERIFICATION)
+- [~] Live Coston2 loop: payment → attestation → on-chain proof verified (true) → **order registered (orderCount 1)** — all proven 2026-08-07; mint/deposit/route-switch legs await the executor tick (agent on an always-on host)
 - [~] Demo video (2 min, wf-recorder) — (user), docs/DEMO_SCRIPT.md
 - [~] Mainnet read-only demo — optional, after Coston2
 

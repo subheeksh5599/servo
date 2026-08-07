@@ -69,8 +69,8 @@ wrapper:
 
 | Contract | Address |
 |---|---|
-| StandingOrderRegistry | `0x3B40edd04B3275868b6362Da1FC706D069379BE6` |
-| ExecutionController | `0x1F4592d16215387308928512B2404a9b6541b0d9` |
+| StandingOrderRegistry | `0x23504cb325032023ef207c2915F6CAee41b215Ac` |
+| ExecutionController | `0xD1f069BBEf328FA71dd1101646D4fDE68173c497` |
 | stXRP adapter (venue 1) | `0xD054bC0216A52bBe24D69818493b997a5aaCE7df` |
 | earnXRP adapter (venue 2) | `0x1f505140c5733ceD8BaC30093dDDfDE1c628ddE1` |
 
