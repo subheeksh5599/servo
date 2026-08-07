@@ -51,7 +51,7 @@ const REGISTRY_ABI = parseAbi([
 const fdc = new FdcClient({
   verifierUrl: env.FDC_VERIFIER_URL,
   verifierKey: env.FDC_VERIFIER_KEY,
-  daUrl: env.FDC_DA_URL,
+  daUrl: env.FDC_DA_URL || "https://ctn2-data-availability.flare.network",
   sourceId: env.FDC_SOURCE_ID,
 });
 
